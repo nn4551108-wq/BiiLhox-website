@@ -1,429 +1,137 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#080808">
-<title>BiiLHOX Studio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#08090b">
+<title>BiiLHOX Studio — Creative Workspace</title>
 <style>
-:root {
-  color-scheme: dark;
-  --bg:#080808; --panel:#111; --panel2:#181818;
-  --line:#303030; --silver:#d0d0d0; --muted:#999; --white:#f5f5f5;
-}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--white);font:14px Arial,sans-serif}
-button,input,textarea{font:inherit}
-button{cursor:pointer;color:inherit}
-button:focus-visible{outline:2px solid #ddd;outline-offset:3px}
-.sidebar{
- position:fixed;inset:0 auto 0 0;width:250px;padding:25px 16px;
- background:#0b0b0b;border-right:1px solid #292929;
- display:flex;flex-direction:column;z-index:10;
- transition:transform .25s ease
-}
-.brand{text-align:center;padding:8px 0 27px;border-bottom:1px solid #292929}
-.brand-name{
- font: bold 37px Georgia,serif;letter-spacing:-1.5px;
- background:linear-gradient(#fff,#bbb,#666);
- color:transparent;background-clip:text;-webkit-background-clip:text
-}
-.brand small{display:block;font-size:10px;letter-spacing:7px;color:#aaa;margin:9px 0 0 7px}
-.nav{display:grid;gap:7px;margin-top:18px}
-.nav-label{font-size:10px;letter-spacing:3px;color:#777;padding:20px 12px 8px}
-.nav button{
- width:100%;display:flex;align-items:center;gap:13px;padding:13px;
- border:1px solid transparent;border-radius:8px;background:transparent;
- color:#bbb;text-align:left
-}
-.nav button:hover{background:#1a1a1a}
-.nav button.active{
- background:linear-gradient(100deg,#303030,#141414);
- border-color:#444;color:#fff;box-shadow:inset 3px 0 #ddd
-}
-.ico{width:22px;text-align:center;font-size:18px}
-.sidefoot{margin-top:auto;border-top:1px solid #292929;padding-top:20px;color:#bbb;font-size:12px}
-.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#ddd;margin-right:9px;box-shadow:0 0 10px #aaa}
-.credit{text-align:center;font-size:9px;letter-spacing:2px;color:#777;margin-top:25px}
-.main{margin-left:250px;min-height:100vh;min-width:0}
-.topbar{
- min-height:66px;padding:12px 30px;display:flex;align-items:center;
- justify-content:space-between;gap:12px;background:#0b0b0b;border-bottom:1px solid #292929
-}
-.toplabel{font-size:10px;letter-spacing:3px;color:#ccc}
-.topright{display:flex;align-items:center;gap:16px;color:#aaa;font-size:11px}
-.workspace{border:1px solid #444;padding:9px 13px;border-radius:30px;font-size:9px;letter-spacing:1px;white-space:nowrap}
-.avatar{width:38px;height:38px;flex-shrink:0;border:1px solid #aaa;border-radius:50%;display:grid;place-items:center;font:23px Georgia}
-.menu{display:none;border:0;background:none;color:#fff;font-size:23px;padding:4px}
-.content{width:100%;max-width:1450px;margin:auto;padding:26px 28px}
-.hero{
- position:relative;isolation:isolate;overflow:hidden;min-height:270px;padding:34px;
- border:1px solid #393939;border-radius:13px;
- background:radial-gradient(ellipse at 84% 12%,#7774,transparent 35%),
- linear-gradient(115deg,#1b1b1b,#0a0a0a 75%)
-}
-.hero:after{
- content:"";position:absolute;z-index:-1;width:280px;height:390px;
- right:5%;top:-130px;border:1px solid #8887;transform:rotate(35deg);
- box-shadow:20px 0 #8882,40px 0 #8882,60px 0 #8882,80px 0 #8881
-}
-.eyebrow{font-size:10px;letter-spacing:4px;color:#bbb}
-.hero h1{font-size:clamp(34px,4.1vw,54px);line-height:1.05;letter-spacing:-2px;margin:21px 0 13px;position:relative}
-.hero h1 em{font:italic 1em Georgia,serif;color:#aaa}
-.hero p{max-width:470px;color:#aaa;font-size:13px;line-height:1.8}
-.btn{
- display:inline-block;border:1px solid #eee;border-radius:7px;
- padding:12px 17px;background:linear-gradient(#eee,#aaa);
- color:#111;font-weight:bold;margin-top:9px
-}
-.btn.secondary{background:#191919;color:#eee;border-color:#444}
-.heading{display:flex;align-items:center;gap:15px;margin:29px 0 16px}
-.heading h2{font-size:20px;margin:0;white-space:nowrap}
-.rule{height:1px;background:#303030;flex:1}
-.kicker{font-size:9px;letter-spacing:2px;color:#888;white-space:nowrap}
-.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.stat,.tool,.panel{
- min-width:0;border:1px solid #303030;border-radius:11px;
- background:linear-gradient(140deg,#171717,#0c0c0c)
-}
-.stat{padding:21px;display:flex;align-items:center;gap:15px}
-.symbol{
- width:51px;height:51px;flex-shrink:0;border:1px solid #666;
- border-radius:12px;display:grid;place-items:center;font-size:23px;
- background:linear-gradient(145deg,#292929,#101010)
-}
-.stat label{font-size:9px;letter-spacing:1.5px;color:#aaa}
-.stat strong{display:block;font-size:31px;margin:9px 0 6px}
-.muted{font-size:11px;line-height:1.7;color:#999}
-.tools{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.tool{padding:20px;display:flex;align-items:flex-start;gap:14px;transition:border-color .2s,transform .2s}
-.tool:hover,.stat:hover{border-color:#777}
-.tool:hover{transform:translateY(-2px)}
-.tool .symbol{width:54px;height:54px}
-.toolbody{min-width:0;flex:1}
-.tag{display:inline-block;font-size:9px;color:#ccc;border:1px solid #414141;padding:5px 8px;border-radius:20px;margin-bottom:10px}
-.tool h3{margin:0 0 8px;font-size:15px}
-.tool p{font-size:11px;line-height:1.7;color:#aaa;margin:0 0 13px}
-.open{background:#151515;border:1px solid #444;border-radius:20px;padding:8px 12px;color:#eee;font-size:11px}
-.open:hover{background:#292929}
-.page{display:none}
-.page.active{display:block}
-.panel{padding:24px;margin-bottom:15px}
-.panel h2{font-size:21px;margin:0 0 10px}
-.panel p{color:#aaa;line-height:1.8}
-.form{display:grid;gap:14px}
-.field label{display:block;margin-bottom:8px;color:#bbb;font-size:12px}
-.field input,.field textarea{
- width:100%;background:#090909;border:1px solid #383838;
- border-radius:8px;padding:12px;color:#fff;outline:none
-}
-.field input:focus,.field textarea:focus{border-color:#aaa}
-.field textarea{min-height:100px;resize:vertical}
-.list{display:grid;gap:10px;margin-top:17px}
-.item{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px;border:1px solid #333;border-radius:9px;background:#141414}
-.item-info{min-width:0;overflow-wrap:anywhere}
-.item p{font-size:12px;color:#999;line-height:1.6}
-.delete{background:#191919;border:1px solid #444;border-radius:7px;padding:8px}
-.empty{padding:28px;text-align:center;color:#888;border:1px dashed #444;border-radius:9px;line-height:1.8}
-.note{font-size:12px;color:#999;line-height:1.8;margin-top:17px}
-footer{margin-top:30px;border-top:1px solid #262626;padding:19px;text-align:center;color:#777;font-size:9px;letter-spacing:2px;line-height:2}
-.overlay{display:none}
-
-/* TABLET AUTO LAYOUT */
-@media(min-width:681px) and (max-width:1100px){
- .sidebar{width:215px}
- .main{margin-left:215px}
- .content{padding:20px}
- .stats{gap:9px}
- .stat{padding:13px;gap:9px}
- .stat .symbol{width:42px;height:42px}
- .tools{grid-template-columns:repeat(2,minmax(0,1fr))}
- .topbar{padding:12px 20px}
-}
-
-/* MOBILE AUTO LAYOUT */
-@media(max-width:680px){
- .sidebar{width:260px;max-width:85vw;transform:translateX(-105%);box-shadow:15px 0 40px #0008}
- .sidebar.open{transform:translateX(0)}
- .main{margin-left:0;width:100%}
- .topbar{min-height:60px;padding:10px 14px}
- .menu{display:block}
- .toplabel{font-size:9px;letter-spacing:1.5px}
- .topright{gap:9px}
- .workspace{display:none}
- .avatar{width:33px;height:33px}
- .content{padding:14px}
- .hero{min-height:245px;padding:23px 19px}
- .hero h1{font-size:clamp(30px,8vw,39px);letter-spacing:-1.3px}
- .hero p{font-size:12px}
- .hero:after{right:-150px;opacity:.6}
- .stats,.tools{grid-template-columns:minmax(0,1fr);gap:11px}
- .stat{padding:16px}
- .tool{padding:17px}
- .heading{gap:9px;margin:25px 0 14px}
- .heading h2{font-size:17px}
- .kicker{font-size:8px;letter-spacing:1px}
- .panel{padding:17px}
- .item{align-items:flex-start}
- footer{font-size:8px}
- .overlay.show{display:block;position:fixed;inset:0;background:#0009;z-index:8}
-}
-
-/* REDUCE MOTION FOR ACCESSIBILITY */
-@media(prefers-reduced-motion:reduce){
- *,*::before,*::after{scroll-behavior:auto!important;transition:none!important}
-}
+:root{--bg:#070809;--panel:#0d0f12;--panel2:#111419;--line:#282c32;--muted:#858b95;--silver:#e5e8ed;--white:#f8f9fb;--green:#6fe0a0;--radius:16px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 72% -15%,#20252c 0,transparent 38%),var(--bg);color:var(--white);font:14px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}button,input{font:inherit}button{cursor:pointer;color:inherit}.app{min-height:100vh;display:grid;grid-template-columns:238px minmax(0,1fr);max-width:1800px;margin:auto}.sidebar{position:sticky;top:0;height:100vh;border-right:1px solid #25282d;padding:27px 16px 20px;display:flex;flex-direction:column;background:linear-gradient(180deg,rgba(14,16,19,.96),rgba(7,8,9,.97));z-index:5}.brand{font-size:24px;font-weight:850;font-style:italic;letter-spacing:-1.5px;text-align:center;background:linear-gradient(180deg,#fff 12%,#8e949e 48%,#f8f9fb 62%,#666d77);color:transparent;background-clip:text;-webkit-background-clip:text;text-shadow:0 0 25px #c7d0df15;margin:3px 0 35px}.nav-label{font-size:9px;color:#7c838d;letter-spacing:2px;padding:0 14px;margin:20px 0 8px}.nav{display:grid;gap:5px}.nav button{border:1px solid transparent;background:transparent;color:#b7bdc6;display:flex;align-items:center;gap:12px;padding:11px 13px;border-radius:10px;text-align:left;font-size:12px;transition:.2s}.nav button:hover{background:#171a1f;color:white}.nav button.active{color:#fff;background:linear-gradient(100deg,#262b32,#121519 78%);border-color:#343942;box-shadow:inset 2px 0 #e8edf5,0 5px 20px #0005}.ico{width:19px;height:19px;display:inline-grid;place-items:center;flex:none;color:#d6dbe3;font-size:16px}.side-bottom{margin-top:auto;border-top:1px solid #24272c;padding:17px 10px 0;display:flex;gap:10px;align-items:center}.online-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 12px #6fe0a088}.side-bottom b{font-size:11px;font-weight:600}.side-bottom small{display:block;color:#7f8791;font-size:10px;margin-top:2px}.main{min-width:0;padding:0 28px 38px}.topbar{height:78px;display:flex;align-items:center;gap:14px;border-bottom:1px solid #202328;margin-bottom:18px}.mobile-menu{display:none}.search{height:38px;max-width:370px;flex:1;display:flex;align-items:center;gap:10px;padding:0 13px;border:1px solid #2a2e35;border-radius:10px;background:#0c0e11;color:#7d8590}.search input{width:100%;border:0;outline:0;background:transparent;color:white;font-size:12px}.top-spacer{flex:1}.icon-button{border:1px solid #2c3037;background:#101216;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:#dce1e8}.workspace{height:38px;border:1px solid #30343b;background:linear-gradient(120deg,#171a1f,#0c0e11);border-radius:20px;padding:0 15px;font-size:11px;white-space:nowrap}.avatar{height:35px;width:35px;border-radius:50%;border:1px solid #555c67;background:radial-gradient(circle at 30% 20%,#747b86,#252930 55%,#111);font-weight:800;box-shadow:0 0 0 3px #15181d}.hero{position:relative;min-height:235px;overflow:hidden;border:1px solid #353a42;border-radius:14px;background:linear-gradient(90deg,rgba(5,6,8,.96) 0%,rgba(5,6,8,.77) 44%,rgba(5,6,8,.14) 100%),radial-gradient(ellipse at 80% 25%,#58616d 0,#222831 25%,#0a0c0f 64%);box-shadow:inset 0 1px #ffffff14,0 16px 45px #0005;padding:34px 38px;display:flex;align-items:center}.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,transparent 35%,#aeb9c61a 35.2%,transparent 35.7%),linear-gradient(145deg,transparent 71%,#e2e8f21a 71.2%,transparent 71.8%);pointer-events:none}.hero-art{position:absolute;right:5%;top:-30%;width:43%;height:160%;opacity:.62;background:radial-gradient(ellipse at 55% 50%,#6e7784 0,#262c35 14%,transparent 15%),linear-gradient(140deg,transparent 37%,#aeb7c4 37.3%,#252b34 38%,transparent 40%),linear-gradient(30deg,transparent 50%,#707985 50.3%,#15181d 51%,transparent 53%);filter:drop-shadow(0 0 20px #c4ccd633);transform:skewX(-12deg)}.hero-content{position:relative;z-index:1;max-width:490px}.eyebrow{font-size:9px;letter-spacing:4px;color:#c4cad3;text-transform:uppercase}.hero h1{margin:8px 0 0;font-size:clamp(34px,4vw,54px);line-height:.95;letter-spacing:-2.5px;font-weight:850;font-style:italic;text-shadow:0 2px 20px #fff3;background:linear-gradient(#fff 20%,#aab1bc 52%,#f8f9fb 72%,#727984);color:transparent;background-clip:text;-webkit-background-clip:text}.studio-word{letter-spacing:8px;font-size:12px;margin:7px 0 12px 6px;color:#d4d9e1}.hero p{color:#c2c7cf;font-size:12px;max-width:340px;margin:0 0 17px}.primary{border:1px solid #d3d9e2;border-radius:9px;padding:10px 15px;background:linear-gradient(135deg,#f3f5f8,#a8afb9 52%,#f8f9fb);color:#111317;font-size:11px;font-weight:750;box-shadow:0 4px 22px #e6ebf51a}.primary:hover{filter:brightness(1.08);transform:translateY(-1px)}.hero-tag{position:absolute;right:25px;bottom:18px;color:#c0c7d1;font-size:9px;letter-spacing:3px}.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin:16px 0 22px}.stat{min-width:0;display:flex;gap:13px;align-items:center;padding:17px 15px;background:linear-gradient(135deg,#111419,#090a0c);border:1px solid #2b3037;border-radius:13px;box-shadow:inset 0 1px #ffffff08}.stat-icon{height:43px;width:43px;border:1px solid #424852;border-radius:13px;display:grid;place-items:center;font-size:19px;background:linear-gradient(145deg,#2b3038,#101216);box-shadow:inset 0 1px #fff2}.stat-label{font-size:10px;color:#a0a7b1}.stat-value{font-size:21px;font-weight:750;letter-spacing:-.5px;margin-top:2px}.stat-sub{font-size:9px;color:var(--green);margin-top:1px}.content-grid{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:18px}.section-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:13px;gap:10px}.section-head h2{font-size:19px;letter-spacing:-.5px;margin:0;font-weight:650}.section-head p{font-size:11px;color:#9da4ae;margin:3px 0 0}.text-button{border:0;background:transparent;color:#d7dce4;font-size:10px;white-space:nowrap}.tools{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.tool-card{position:relative;min-height:132px;text-align:left;padding:13px;border:1px solid #2e333b;border-radius:12px;background:linear-gradient(145deg,#1b1f25,#0b0d10 65%);overflow:hidden;transition:.2s}.tool-card:before{content:"";position:absolute;inset:0;background:linear-gradient(130deg,#fff0 25%,#cbd3df0a 45%,transparent 65%);pointer-events:none}.tool-card:hover{transform:translateY(-3px);border-color:#737b88;box-shadow:0 12px 28px #0008,0 0 20px #aeb9c50a}.tool-icon{height:37px;width:37px;border-radius:12px;border:1px solid #515863;background:linear-gradient(145deg,#4a515b,#171a1f 68%);display:grid;place-items:center;font-size:17px;box-shadow:inset 0 1px #fff4;margin-bottom:10px}.tool-card b{display:block;font-size:11px;font-weight:650}.tool-card small{display:block;font-size:9px;color:#939ba6;margin-top:3px}.tool-arrow{position:absolute;right:12px;bottom:10px;color:#cdd3dc}.right-column{display:grid;align-content:start;gap:15px}.mini-panel{border:1px solid #2c3138;border-radius:12px;background:linear-gradient(145deg,#101317,#090a0c);padding:13px}.mini-panel h3{font-size:11px;font-weight:650;margin:0 0 10px}.action-row,.activity-row{width:100%;display:flex;align-items:center;gap:9px;text-align:left;background:transparent;border:0;border-radius:7px;padding:7px 3px;color:#d8dde5;font-size:10px}.action-row:hover,.activity-row:hover{background:#1b1f25}.mini-ico{width:23px;height:23px;border:1px solid #363c45;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#303640,#101216);font-size:11px;flex:none}.chev{margin-left:auto;color:#8d95a0}.activity-row{padding:9px 2px;border-bottom:1px solid #22262b}.activity-row:last-child{border-bottom:0}.activity-row b{display:block;font-weight:550;font-size:10px}.activity-row small{display:block;color:#8c949f;font-size:9px;margin-top:2px}.activity-row .mini-ico{width:29px;height:29px;font-size:13px}.footer{color:#626a75;font-size:9px;text-align:center;padding:28px 0 0;letter-spacing:.5px}.toast{position:fixed;right:22px;bottom:22px;z-index:20;max-width:calc(100vw - 30px);background:#171b21;border:1px solid #4a515c;border-radius:12px;padding:13px 17px;box-shadow:0 12px 40px #000b;color:#edf1f6;font-size:12px;opacity:0;transform:translateY(10px);pointer-events:none;transition:.25s}.toast.show{opacity:1;transform:translateY(0)}.mobile-nav-overlay{display:none}
+@media(min-width:1500px){.main{padding-left:36px;padding-right:36px}.hero{min-height:260px}.tool-card{min-height:145px}}
+@media(max-width:1100px){.app{grid-template-columns:205px minmax(0,1fr)}.sidebar{padding-left:12px;padding-right:12px}.main{padding:0 18px 30px}.content-grid{grid-template-columns:minmax(0,1fr)}.right-column{grid-template-columns:repeat(2,minmax(0,1fr))}.tools{grid-template-columns:repeat(3,minmax(0,1fr))}.hero{min-height:220px}.hero-tag{display:none}}
+@media(max-width:720px){.app{display:block}.sidebar{position:fixed;left:0;top:0;width:255px;transform:translateX(-105%);transition:transform .25s;box-shadow:20px 0 70px #000b}.sidebar.open{transform:translateX(0)}.mobile-nav-overlay.show{display:block;position:fixed;inset:0;background:#0009;z-index:4}.main{padding:0 13px 25px}.topbar{height:65px;gap:8px;margin-bottom:13px}.mobile-menu{display:grid;place-items:center;width:35px;height:35px;border:1px solid #30343b;border-radius:9px;background:#111419}.search{height:36px;min-width:0;padding:0 9px}.search input{font-size:11px}.workspace{display:none}.icon-button{width:34px;height:34px}.avatar{width:32px;height:32px}.hero{min-height:220px;padding:27px 21px;background:linear-gradient(90deg,#060708ed,#08090a99 68%,#08090a77),radial-gradient(ellipse at 90% 20%,#5d6672,#14171c 42%,#090a0c 80%)}.hero-art{right:-12%;width:58%;opacity:.4}.hero h1{font-size:39px;letter-spacing:-2px}.hero p{font-size:11px;max-width:260px}.stats{gap:8px;margin:12px 0 21px}.stat{padding:12px 9px;display:block}.stat-icon{height:32px;width:32px;font-size:15px;border-radius:10px;margin-bottom:8px}.stat-label{font-size:9px}.stat-value{font-size:18px}.stat-sub{font-size:8px}.section-head h2{font-size:17px}.section-head p{font-size:10px}.tools{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.tool-card{min-height:130px;padding:12px}.right-column{grid-template-columns:1fr 1fr;gap:9px}.mini-panel{padding:10px}.mini-panel h3{font-size:10px}.action-row{font-size:9px;gap:6px}.activity-row{gap:6px}.activity-row b{font-size:9px}.activity-row small{font-size:8px}.mini-ico{width:21px;height:21px}.footer{padding-top:23px}}
+@media(max-width:390px){.main{padding-left:10px;padding-right:10px}.search input{font-size:10px}.hero{padding:24px 16px;min-height:205px}.hero h1{font-size:33px}.studio-word{font-size:10px;letter-spacing:6px}.hero p{max-width:225px}.stats{gap:6px}.stat{padding:10px 7px}.stat-value{font-size:16px}.stat-label{font-size:8px}.right-column{grid-template-columns:1fr}.tool-card{min-height:123px}}
 </style>
 </head>
 <body>
-
-<div class="overlay" id="overlay"></div>
-
+<div class="mobile-nav-overlay" id="overlay" aria-hidden="true"></div>
+<div class="app">
 <aside class="sidebar" id="sidebar">
- <div class="brand">
-  <div class="brand-name">BiiLHOX</div>
-  <small>S T U D I O</small>
- </div>
- <nav class="nav">
-  <button class="active" data-page="dashboard"><span class="ico">⌂</span>Dashboard</button>
-  <button data-page="upload"><span class="ico">⇧</span>Upload Center</button>
-  <button data-page="animations"><span class="ico">◇</span>Animations</button>
-  <button data-page="mesh"><span class="ico">⬡</span>Image to Mesh</button>
-  <button data-page="skybox"><span class="ico">◎</span>SkyBox 360</button>
+  <div class="brand">BiiLHOX</div>
+  <nav class="nav" aria-label="Main navigation">
+    <button class="active" data-page="Dashboard"><span class="ico">⌂</span>Dashboard</button>
+    <button data-page="Upload Center"><span class="ico">⇧</span>Upload Center</button>
+    <button data-page="Animations"><span class="ico">▷</span>Animations</button>
+    <button data-page="Image to Mesh"><span class="ico">⬡</span>Image to Mesh</button>
+    <button data-page="SkyBox 360"><span class="ico">◇</span>SkyBox 360</button>
+  </nav>
   <div class="nav-label">PERSONAL</div>
-  <button data-page="library"><span class="ico">▦</span>My Library</button>
-  <button data-page="settings"><span class="ico">⚙</span>Settings</button>
- </nav>
- <div class="sidefoot"><span class="dot"></span>Studio is ready<div class="credit">CRAFTED BY BIILXLANGZ</div></div>
+  <nav class="nav">
+    <button data-page="My Library"><span class="ico">▣</span>My Library</button>
+    <button data-page="Settings"><span class="ico">⚙</span>Settings</button>
+  </nav>
+  <div class="side-bottom"><span class="online-dot"></span><div><b>Studio Online</b><small>Build · Create · Evolve</small></div></div>
 </aside>
-
 <main class="main">
- <header class="topbar">
-  <div style="display:flex;align-items:center;gap:12px;min-width:0">
-   <button class="menu" id="menuBtn" aria-label="Buka menu">☰</button>
-   <span style="color:#555">│</span>
-   <span class="toplabel" id="crumb">B I I L H O X &nbsp; S T U D I O</span>
+  <header class="topbar">
+    <button class="mobile-menu" id="menuBtn" aria-label="Open navigation">☰</button>
+    <label class="search"><span>⌕</span><input id="searchInput" placeholder="Search tools, projects, or anything..." autocomplete="off"></label>
+    <div class="top-spacer"></div>
+    <button class="icon-button" id="themeBtn" aria-label="Change appearance">☼</button>
+    <button class="workspace" id="workspaceBtn">♧ &nbsp; Personal Workspace</button>
+    <button class="avatar" id="profileBtn" aria-label="Profile">B</button>
+  </header>
+  <section class="hero" id="hero">
+    <div class="hero-art" aria-hidden="true"></div>
+    <div class="hero-content">
+      <div class="eyebrow">WELCOME TO</div>
+      <h1>BiiLHOX</h1><div class="studio-word">S T U D I O</div>
+      <p>Satu workspace untuk mengatur project, menyimpan ide, dan menjelajahi tools kreatif BiiLHOX Studio.</p>
+      <button class="primary" id="exploreBtn">Jelajahi Tools&nbsp; →</button>
+    </div>
+    <div class="hero-tag">CREATE &nbsp; / &nbsp; DESIGN &nbsp; / &nbsp; BUILD</div>
+  </section>
+  <section class="stats" aria-label="Studio statistics">
+    <div class="stat"><div class="stat-icon">◩</div><div><div class="stat-label">Saved Projects</div><div class="stat-value" id="projectCount">12</div><div class="stat-sub">↗ Demo workspace</div></div></div>
+    <div class="stat"><div class="stat-icon">♧</div><div><div class="stat-label">Creative Tools</div><div class="stat-value">04</div><div class="stat-sub">◉ UI tersedia</div></div></div>
+    <div class="stat"><div class="stat-icon">♙</div><div><div class="stat-label">Studio Status</div><div class="stat-value" style="font-size:17px">READY</div><div class="stat-sub">● Online & Stable</div></div></div>
+  </section>
+  <div class="content-grid">
+    <section id="toolsSection">
+      <div class="section-head"><div><h2>Creative Tools</h2><p>Pilih tools yang kamu butuhkan untuk mulai berkarya.</p></div><button class="text-button" id="viewAllBtn">Lihat Semua&nbsp; →</button></div>
+      <div class="tools" id="toolGrid">
+        <button class="tool-card" data-tool="Upload Center" data-desc="Simpan aset dan referensi"><span class="tool-icon">⇧</span><b>Upload Center</b><small>Simpan aset & referensi</small><span class="tool-arrow">→</span></button>
+        <button class="tool-card" data-tool="Animations" data-desc="Kelola animasi ID Roblox"><span class="tool-icon">♟</span><b>Animations</b><small>Kelola animasi & ID Roblox</small><span class="tool-arrow">→</span></button>
+        <button class="tool-card" data-tool="Image to Mesh" data-desc="Referensi gambar ke 3D"><span class="tool-icon">⬡</span><b>Image to Mesh</b><small>Referensi gambar ke 3D</small><span class="tool-arrow">→</span></button>
+        <button class="tool-card" data-tool="SkyBox 360" data-desc="Konsep environment"><span class="tool-icon">◇</span><b>SkyBox 360</b><small>Konsep environment</small><span class="tool-arrow">→</span></button>
+        <button class="tool-card" data-tool="My Library" data-desc="Lihat semua project"><span class="tool-icon">▣</span><b>My Library</b><small>Lihat semua project</small><span class="tool-arrow">→</span></button>
+        <button class="tool-card" data-tool="Settings" data-desc="Atur preferensi workspace"><span class="tool-icon">⚙</span><b>Settings</b><small>Atur preferensi workspace</small><span class="tool-arrow">→</span></button>
+      </div>
+    </section>
+    <aside class="right-column">
+      <section class="mini-panel"><h3>Quick Actions</h3>
+        <button class="action-row" data-tool="Upload Center"><span class="mini-ico">⇧</span>Upload File <span class="chev">›</span></button>
+        <button class="action-row" data-tool="Animations"><span class="mini-ico">♟</span>New Animation <span class="chev">›</span></button>
+        <button class="action-row" data-tool="Image to Mesh"><span class="mini-ico">⬡</span>New 3D Model <span class="chev">›</span></button>
+        <button class="action-row" data-tool="SkyBox 360"><span class="mini-ico">◇</span>New SkyBox <span class="chev">›</span></button>
+      </section>
+      <section class="mini-panel"><h3>Recent Activity</h3>
+        <button class="activity-row" data-tool="My Library"><span class="mini-ico">⬆</span><span><b>Project_01</b><small>2 jam yang lalu</small></span></button>
+        <button class="activity-row" data-tool="Animations"><span class="mini-ico">♟</span><span><b>Animation_Walk</b><small>5 jam yang lalu</small></span></button>
+        <button class="activity-row" data-tool="SkyBox 360"><span class="mini-ico">⬡</span><span><b>SkyBox_Mountain</b><small>1 hari yang lalu</small></span></button>
+        <button class="activity-row" data-tool="My Library"><span class="mini-ico">▣</span><span><b>Model_Sword</b><small>1 hari yang lalu</small></span></button>
+      </section>
+    </aside>
   </div>
-  <div class="topright"><span class="workspace">● &nbsp; PERSONAL WORKSPACE</span><div class="avatar">B</div></div>
- </header>
-
- <div class="content">
-  <section class="page active" id="page-dashboard">
-   <div class="hero">
-    <div class="eyebrow">WELCOME TO BIILHOX STUDIO</div>
-    <h1>Build something<br><em>extraordinary.</em></h1>
-    <p>Satu workspace untuk mengatur project, menyimpan ide, dan menjelajahi tools kreatif BiiLHOX Studio.</p>
-    <button class="btn" data-go="library">Explore My Library &nbsp; ↗</button>
-   </div>
-
-   <div class="heading"><h2>Workspace Overview</h2><div class="rule"></div><span class="kicker">YOUR STUDIO</span></div>
-   <div class="stats">
-    <div class="stat"><div class="symbol">▤</div><div><label>SAVED PROJECTS</label><strong id="projectCount">00</strong><div class="muted">Project tersimpan di library</div></div></div>
-    <div class="stat"><div class="symbol">⬡</div><div><label>CREATIVE TOOLS</label><strong>04</strong><div class="muted">Tools tersedia di workspace</div></div></div>
-    <div class="stat"><div class="symbol">ϟ</div><div><label>STUDIO STATUS</label><strong style="font-size:27px">READY</strong><div class="muted">Workspace aktif</div></div></div>
-   </div>
-
-   <div class="heading"><h2>Creative Tools</h2><div class="rule"></div><span class="kicker">QUICK ACCESS</span></div>
-   <div class="tools">
-    <div class="tool"><div class="symbol">⇧</div><div class="toolbody"><span class="tag">WORKSPACE</span><h3>Upload Center</h3><p>Simpan catatan aset dan referensi link project.</p><button class="open" data-go="upload">Open Tool ↗</button></div></div>
-    <div class="tool"><div class="symbol">◇</div><div class="toolbody"><span class="tag">ANIMATION</span><h3>Animations</h3><p>Kelola catatan animasi dan ID asset Roblox.</p><button class="open" data-go="animations">Open Tool ↗</button></div></div>
-    <div class="tool"><div class="symbol">⬡</div><div class="toolbody"><span class="tag">3D WORKSPACE</span><h3>Image to Mesh</h3><p>Simpan referensi gambar dan konsep model 3D.</p><button class="open" data-go="mesh">Open Tool ↗</button></div></div>
-    <div class="tool"><div class="symbol">◎</div><div class="toolbody"><span class="tag">ENVIRONMENT</span><h3>SkyBox 360</h3><p>Simpan konsep environment dan referensi skybox.</p><button class="open" data-go="skybox">Open Tool ↗</button></div></div>
-    <div class="tool"><div class="symbol">▦</div><div class="toolbody"><span class="tag">PERSONAL</span><h3>My Library</h3><p>Lihat dan kelola catatan project yang tersimpan.</p><button class="open" data-go="library">Open Library ↗</button></div></div>
-    <div class="tool"><div class="symbol">⚙</div><div class="toolbody"><span class="tag">PREFERENCES</span><h3>Settings</h3><p>Atur preferensi workspace BiiLHOX Studio.</p><button class="open" data-go="settings">Open Settings ↗</button></div></div>
-   </div>
-  </section>
-
-  <section class="page" id="page-upload">
-   <div class="heading"><h2>Upload Center</h2><div class="rule"></div></div>
-   <div class="panel"><h2>Asset Workspace</h2><p>Catat nama aset dan link file untuk pengelolaan project.</p>
-    <form class="form" id="uploadForm">
-     <div class="field"><label>Nama aset / project</label><input name="name" required placeholder="Contoh: BiiLHOX UI Kit"></div>
-     <div class="field"><label>Link file (opsional)</label><input name="link" type="url" placeholder="https://..."></div>
-     <div class="field"><label>Catatan</label><textarea name="note" placeholder="Detail aset atau project..."></textarea></div>
-     <button class="btn">Simpan ke Library</button>
-    </form>
-    <div class="note">Catatan: versi ini menyimpan referensi di browser, belum mengunggah file ke server.</div>
-   </div>
-  </section>
-
-  <section class="page" id="page-animations">
-   <div class="heading"><h2>Animations</h2><div class="rule"></div></div>
-   <div class="panel"><h2>Animation Reference</h2><p>Simpan nama animasi dan ID asset Roblox.</p>
-    <form class="form" id="animationForm">
-     <div class="field"><label>Nama animasi</label><input name="name" required placeholder="Fishing Idle"></div>
-     <div class="field"><label>Roblox Animation ID</label><input name="link" placeholder="1234567890"></div>
-     <div class="field"><label>Catatan</label><textarea name="note" placeholder="Kegunaan atau detail animasi..."></textarea></div>
-     <button class="btn">Simpan Animasi</button>
-    </form>
-   </div>
-  </section>
-
-  <section class="page" id="page-mesh">
-   <div class="heading"><h2>Image to Mesh</h2><div class="rule"></div></div>
-   <div class="panel"><h2>3D Project Notes</h2><p>Simpan referensi dan rencana model 3D.</p>
-    <form class="form" id="meshForm">
-     <div class="field"><label>Nama model</label><input name="name" required placeholder="Silver Sword"></div>
-     <div class="field"><label>Link gambar referensi</label><input name="link" type="url" placeholder="https://..."></div>
-     <div class="field"><label>Deskripsi model</label><textarea name="note" placeholder="Bentuk, material, ukuran..."></textarea></div>
-     <button class="btn">Simpan Referensi</button>
-    </form>
-    <div class="note">Konversi gambar menjadi mesh 3D belum tersedia di versi ini.</div>
-   </div>
-  </section>
-
-  <section class="page" id="page-skybox">
-   <div class="heading"><h2>SkyBox 360</h2><div class="rule"></div></div>
-   <div class="panel"><h2>Environment Planner</h2><p>Simpan konsep suasana untuk map Roblox.</p>
-    <form class="form" id="skyForm">
-     <div class="field"><label>Nama environment</label><input name="name" required placeholder="Midnight Summit"></div>
-     <div class="field"><label>Link referensi (opsional)</label><input name="link" type="url" placeholder="https://..."></div>
-     <div class="field"><label>Deskripsi suasana</label><textarea name="note" placeholder="Warna langit, ambience, tema map..."></textarea></div>
-     <button class="btn">Simpan Environment</button>
-    </form>
-    <div class="note">Generator panorama 360 belum tersedia di versi ini.</div>
-   </div>
-  </section>
-
-  <section class="page" id="page-library">
-   <div class="heading"><h2>My Library</h2><div class="rule"></div></div>
-   <div class="panel"><h2>Saved Projects</h2><p>Catatan project yang tersimpan di browser ini.</p><div id="libraryList" class="list"></div></div>
-  </section>
-
-  <section class="page" id="page-settings">
-   <div class="heading"><h2>Settings</h2><div class="rule"></div></div>
-   <div class="panel"><h2>Workspace Preferences</h2>
-    <form class="form" id="settingsForm">
-     <div class="field"><label>Nama workspace</label><input id="workspaceName" maxlength="45" placeholder="BiiLHOX Studio"></div>
-     <button class="btn">Simpan Pengaturan</button>
-    </form>
-    <div class="note">Pengaturan ini tersimpan di browser perangkat ini.</div>
-   </div>
-  </section>
-
-  <footer>BIILHOX STUDIO &nbsp; • &nbsp; BLACK & SILVER EDITION &nbsp; • &nbsp; BY BIILXLANGZ</footer>
- </div>
+  <footer class="footer">BiiLHOX STUDIO &nbsp; · &nbsp; BIGGER IDEAS, BETTER CREATIONS</footer>
 </main>
-
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
-const $=s=>document.querySelector(s);
-const $$=s=>document.querySelectorAll(s);
-const pages=["dashboard","upload","animations","mesh","skybox","library","settings"];
-const titles={
- dashboard:"B I I L H O X   S T U D I O",
- upload:"UPLOAD CENTER",animations:"ANIMATIONS",
- mesh:"IMAGE TO MESH",skybox:"SKYBOX 360",
- library:"MY LIBRARY",settings:"SETTINGS"
-};
-let records=[];
-try{records=JSON.parse(localStorage.getItem("biilhox_records")||"[]");if(!Array.isArray(records))records=[]}
-catch(e){records=[]}
-
-function navigate(name){
- if(!pages.includes(name))return;
- pages.forEach(p=>$("#page-"+p).classList.toggle("active",p===name));
- $$(".nav [data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===name));
- $("#crumb").textContent=titles[name];
- closeMenu();
- if(name==="library")renderLibrary();
- window.scrollTo({top:0,behavior:"smooth"});
+const $ = s => document.querySelector(s);
+const toast = $('#toast');
+let toastTimer;
+function notify(message){toast.textContent=message;toast.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove('show'),2600)}
+function selectPage(page){
+  document.querySelectorAll('[data-page]').forEach(btn=>btn.classList.toggle('active',btn.dataset.page===page));
+  $('#sidebar').classList.remove('open');$('#overlay').classList.remove('show');
+  if(page==='Dashboard'){notify('Kamu sudah berada di Dashboard.');return}
+  if(page==='Upload Center'){openUpload();return}
+  if(page==='My Library'){notify('My Library: area demo — penyimpanan cloud belum dihubungkan.');return}
+  if(page==='Settings'){notify('Settings: preferensi workspace akan tersedia di sini.');return}
+  notify(page+': tampilan demo siap dikembangkan.');
 }
-function openMenu(){
- $("#sidebar").classList.add("open");
- $("#overlay").classList.add("show");
+document.querySelectorAll('[data-page]').forEach(btn=>btn.addEventListener('click',()=>selectPage(btn.dataset.page)));
+function toolAction(tool){
+  if(tool==='Upload Center'){openUpload();return}
+  const messages={
+    'Animations':'Animations dipilih. Fitur editor animasi belum terhubung.',
+    'Image to Mesh':'Image to Mesh dipilih. Konversi 3D memerlukan backend/model AI.',
+    'SkyBox 360':'SkyBox 360 dipilih. Generator skybox belum terhubung.',
+    'My Library':'My Library demo: item cloud belum tersimpan.',
+    'Settings':'Settings workspace dipilih.'
+  };notify(messages[tool]||tool+' dipilih.');
 }
-function closeMenu(){
- $("#sidebar").classList.remove("open");
- $("#overlay").classList.remove("show");
+document.querySelectorAll('[data-tool]').forEach(btn=>btn.addEventListener('click',()=>toolAction(btn.dataset.tool)));
+function openUpload(){
+ const input=document.createElement('input');input.type='file';input.multiple=true;
+ input.accept='image/*,video/*,.fbx,.obj,.glb,.gltf,.rbxm,.rbxl,.png,.jpg,.jpeg,.webp';
+ input.addEventListener('change',()=>{if(!input.files.length)return;notify(input.files.length+' file dipilih — upload cloud belum aktif. File belum dikirim ke server.')});
+ input.click();
 }
-$$("[data-page]").forEach(b=>b.addEventListener("click",()=>navigate(b.dataset.page)));
-$$("[data-go]").forEach(b=>b.addEventListener("click",()=>navigate(b.dataset.go)));
-$("#menuBtn").addEventListener("click",()=>{
- $("#sidebar").classList.contains("open")?closeMenu():openMenu();
+$('#exploreBtn').addEventListener('click',()=>$('#toolsSection').scrollIntoView({behavior:'smooth',block:'start'}));
+$('#viewAllBtn').addEventListener('click',()=>notify('Semua tools yang tersedia sudah ditampilkan.'));
+$('#menuBtn').addEventListener('click',()=>{$('#sidebar').classList.add('open');$('#overlay').classList.add('show')});
+$('#overlay').addEventListener('click',()=>{$('#sidebar').classList.remove('open');$('#overlay').classList.remove('show')});
+$('#workspaceBtn').addEventListener('click',()=>notify('Personal Workspace — mode demo.'));
+$('#profileBtn').addEventListener('click',()=>notify('Profil BiiLHOX — autentikasi belum dihubungkan.'));
+$('#themeBtn').addEventListener('click',()=>{document.body.classList.toggle('light-preview');let on=document.body.classList.contains('light-preview');document.body.style.background=on?'radial-gradient(ellipse at 72% -15%,#d6dbe3 0,transparent 38%),#e8ebef':'radial-gradient(ellipse at 72% -15%,#20252c 0,transparent 38%),#070809';document.body.style.color=on?'#101216':'#f8f9fb';notify(on?'Preview terang aktif (sebagian panel tetap gelap).':'Tema gelap aktif.')});
+$('#searchInput').addEventListener('input',e=>{
+ const q=e.target.value.trim().toLowerCase();let shown=0;
+ document.querySelectorAll('.tool-card').forEach(card=>{const match=(card.dataset.tool+' '+card.dataset.desc).toLowerCase().includes(q);card.style.display=match?'':'none';if(match)shown++});
+ if(q && shown===0){$('#viewAllBtn').textContent='0 hasil';}else{$('#viewAllBtn').textContent='Lihat Semua →'}
 });
-$("#overlay").addEventListener("click",closeMenu);
-document.addEventListener("keydown",e=>{if(e.key==="Escape")closeMenu()});
-
-function persist(){
- try{
-  localStorage.setItem("biilhox_records",JSON.stringify(records));
-  return true;
- }catch(e){
-  alert("Penyimpanan browser penuh atau tidak tersedia.");
-  return false;
- }
-}
-function renderLibrary(){
- $("#projectCount").textContent=String(records.length).padStart(2,"0");
- const list=$("#libraryList");
- list.replaceChildren();
- if(!records.length){
-  const empty=document.createElement("div");
-  empty.className="empty";
-  empty.textContent="Library masih kosong. Tambahkan catatan dari Creative Tools.";
-  list.append(empty);return;
- }
- records.forEach(item=>{
-  const row=document.createElement("div");row.className="item";
-  const info=document.createElement("div");info.className="item-info";
-  const title=document.createElement("strong");title.textContent=item.name;
-  const detail=document.createElement("p");
-  detail.textContent=[item.type,item.link,item.note].filter(Boolean).join(" · ");
-  info.append(title,detail);
-  const del=document.createElement("button");del.className="delete";del.textContent="Hapus";
-  del.addEventListener("click",()=>{
-   if(!confirm("Hapus catatan ini dari Library?"))return;
-   records=records.filter(r=>r.id!==item.id);
-   if(persist())renderLibrary();
-  });
-  row.append(info,del);list.append(row);
- });
-}
-function bindForm(id,type){
- $("#"+id).addEventListener("submit",e=>{
-  e.preventDefault();
-  const form=e.currentTarget;
-  const data=new FormData(form);
-  const name=String(data.get("name")||"").trim();
-  if(!name){alert("Isi nama terlebih dahulu.");return}
-  const record={
-   id:Date.now().toString()+"-"+Math.random().toString(36).slice(2,8),
-   type,name,
-   link:String(data.get("link")||"").trim(),
-   note:String(data.get("note")||"").trim()
-  };
-  records.unshift(record);
-  if(persist()){
-   form.reset();renderLibrary();
-   alert("Berhasil disimpan ke My Library.");
-   navigate("library");
-  }else{
-   records=records.filter(r=>r.id!==record.id);
-  }
- });
-}
-bindForm("uploadForm","Asset");
-bindForm("animationForm","Animation");
-bindForm("meshForm","3D Reference");
-bindForm("skyForm","Environment");
-
-try{
- $("#workspaceName").value=localStorage.getItem("biilhox_workspace")||"BiiLHOX Studio";
-}catch(e){
- $("#workspaceName").value="BiiLHOX Studio";
-}
-$("#settingsForm").addEventListener("submit",e=>{
- e.preventDefault();
- const name=$("#workspaceName").value.trim()||"BiiLHOX Studio";
- try{
-  localStorage.setItem("biilhox_workspace",name);
-  alert("Pengaturan workspace tersimpan.");
- }catch(err){
-  alert("Browser tidak bisa menyimpan pengaturan.");
- }
-});
-renderLibrary();
 </script>
 </body>
 </html>
