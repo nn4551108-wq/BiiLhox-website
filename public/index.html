@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BiiLHOX Studio</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#090a0e;color:#edf0f6;font-family:Arial,sans-serif}
+header{padding:22px;border-bottom:1px solid #292d37;background:#101218}
+header h1{margin:0;font-size:22px;letter-spacing:3px}
+header p{color:#929aaa;font-size:12px}
+main{max-width:950px;margin:25px auto;padding:0 16px}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+button{cursor:pointer;border:1px solid #454b59;border-radius:9px;padding:11px 15px;background:#d0d6e0;color:#101218;font-weight:bold}
+nav button{background:#171a22;color:#dce1e9}
+nav button.active{background:#d0d6e0;color:#101218}
+.panel{background:#12141b;border:1px solid #292e39;border-radius:15px;padding:20px;margin-bottom:16px}
+h2{font-size:20px;margin-top:0}
+p{color:#9ba4b4;font-size:13px;line-height:1.6}
+label{display:block;font-size:12px;color:#c5cbd5;margin:14px 0 6px}
+input,select,textarea{width:100%;padding:12px;background:#090b10;color:white;border:1px solid #353b48;border-radius:8px}
+textarea{min-height:80px;resize:vertical}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.notice{padding:12px;border:1px solid #48402d;border-radius:9px;background:#201d15;color:#e4d4a9;font-size:12px;line-height:1.6;margin:15px 0}
+.page{display:none}.page.active{display:block}
+table{width:100%;border-collapse:collapse;font-size:12px}
+td,th{text-align:left;padding:10px;border-bottom:1px solid #303440}
+th{color:#aeb7c6}
+#result{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px}
+footer{text-align:center;color:#697282;font-size:11px;padding:20px}
+@media(max-width:600px){.grid{grid-template-columns:1fr}.panel{padding:15px}header h1{font-size:18px}}
+</style>
+</head>
+<body>
+<header>
+<h1>BiiLHOX STUDIO</h1>
+<p>ROBLOX CREATOR TOOLS · BLACK SILVER</p>
+</header>
+<main>
+<nav>
+<button class="active" data-page="upload">⇧ Upload Asset</button>
+<button data-page="history">▤ History</button>
+<button data-page="settings">⚙ Settings</button>
+</nav>
+
+<section id="upload" class="page active">
+<div class="panel">
+<h2>Asset Upload</h2>
+<p>Upload aset melalui backend Roblox Open Cloud. Gunakan akun atau grup yang memang memiliki izin.</p>
+<div class="grid">
+<div><label>Upload ke</label>
+<select id="targetType"><option value="user">Akun pribadi</option><option value="group">Grup Roblox</option></select></div>
+<div><label>User ID / Group ID</label>
+<input id="creatorId" inputmode="numeric" placeholder="Masukkan ID numerik"></div>
+</div>
+<div class="grid">
+<div><label>Jenis aset</label>
+<select id="assetType">
+<option value="Decal">Image / Decal</option>
+<option value="Audio">Audio</option>
+<option value="Model">Model</option>
+<option value="Animation">Animation</option>
+<option value="Video">Video</option>
+</select></div>
+<div><label>Nama aset</label>
+<input id="displayName" maxlength="50" placeholder="Nama aset Roblox"></div>
+</div>
+<label>Deskripsi</label>
+<textarea id="description" maxlength="1000" placeholder="Deskripsi (opsional)"></textarea>
+<label>File aset</label>
+<input id="file" type="file">
+<div class="notice">API key wajib disimpan di environment variable backend. Jangan masukkan API key atau cookie akun ke halaman ini.</div>
+<button id="uploadBtn">UPLOAD KE ROBLOX</button>
+<p id="result"></p>
+</div>
+</section>
+
+<section id="history" class="page">
+<div class="panel">
+<h2>Upload History</h2>
+<p>Riwayat tersimpan secara lokal di browser ini.</p>
+<div style="overflow:auto"><table><thead><tr><th>Waktu</th><th>Nama</th><th>Target</th><th>Status</th><th>Asset ID</th></tr></thead><tbody id="historyRows"></tbody></table></div>
+<button id="clearHistory" style="margin-top:15px">Hapus riwayat</button>
+</div>
+</section>
+
+<section id="settings" class="page">
+<div class="panel">
+<h2>Backend Settings</h2>
+<p>Website memanggil backend di domain yang sama. Backend Node.js harus aktif agar upload bisa digunakan.</p>
+<button id="checkBtn">PERIKSA KONEKSI</button>
+<p id="backendStatus">Belum diperiksa.</p>
+<div class="notice">GitHub Pages tidak menjalankan server.js. Deploy backend ke hosting Node.js dan simpan ROBLOX_API_KEY sebagai secret/environment variable di hosting tersebut.</div>
+<p>Dokumentasi: <a style="color:#dce1e9" href="https://create.roblox.com/docs/cloud/guides/usage-assets" target="_blank" rel="noreferrer">Roblox Open Cloud Assets API</a></p>
+</div>
+</section>
+</main>
+<footer>BiiLHOX Studio · Unofficial Roblox creator tool</footer>
+<script>
+const $=id=>document.getElementById(id);
+const KEY='biilhox_history_v1';
+function readHistory(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return []}}
+function saveHistory(list){localStorage.setItem(KEY,JSON.stringify(list));renderHistory()}
+function renderHistory(){
+$('historyRows').innerHTML='';
+readHistory().forEach(x=>{
+const tr=document.createElement('tr');
+[x.time,x.name,x.target,x.status,x.assetId||'—'].forEach(v=>{
+const td=document.createElement('td');td.textContent=v;tr.appendChild(td)
+});
+$('historyRows').appendChild(tr)
+})
+}
+document.querySelectorAll('nav button').forEach(btn=>btn.onclick=()=>{
+document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b===btn));
+document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===btn.dataset.page))
+});
+$('uploadBtn').onclick=async()=>{
+const f=$('file').files[0],id=$('creatorId').value.trim(),name=$('displayName').value.trim();
+if(!/^\d+$/.test(id)){ $('result').textContent='Masukkan User ID atau Group ID yang valid.';return}
+if(!name){$('result').textContent='Nama aset wajib diisi.';return}
+if(!f){$('result').textContent='Pilih file aset terlebih dahulu.';return}
+const form=new FormData();
+form.append('file',f);
+form.append('targetType',$('targetType').value);
+form.append('creatorId',id);
+form.append('assetType',$('assetType').value);
+form.append('displayName',name);
+form.append('description',$('description').value);
+$('uploadBtn').disabled=true;$('result').textContent='Mengirim permintaan upload…';
+const target=($('targetType').value==='group'?'Group ':'User ')+id;
+try{
+const r=await fetch('/api/assets/upload',{method:'POST',body:form});
+const data=await r.json();
+if(!r.ok)throw Error(data.error||'Upload gagal');
+const status=data.assetId?'Success':'Submitted';
+const list=readHistory();
+list.unshift({time:new Date().toLocaleString(),name,target,status,assetId:data.assetId||data.operationPath||''});
+saveHistory(list.slice(0,100));
+$('result').textContent='Permintaan diterima oleh backend. '+(data.message||'')+' '+(data.operationPath?'Operation: '+data.operationPath:'');
+}catch(e){
+const list=readHistory();
+list.unshift({time:new Date().toLocaleString(),name,target,status:'Failed',assetId:''});
+saveHistory(list.slice(0,100));
+$('result').textContent='Gagal: '+e.message
+}finally{$('uploadBtn').disabled=false}
+};
+$('clearHistory').onclick=()=>{if(confirm('Hapus riwayat lokal?'))saveHistory([])};
+$('checkBtn').onclick=async()=>{
+$('backendStatus').textContent='Memeriksa…';
+try{
+const r=await fetch('/api/health');const d=await r.json();
+if(!r.ok)throw Error('Backend tidak aktif');
+$('backendStatus').textContent='Backend aktif. API key '+(d.apiKeyConfigured?'terkonfigurasi di server.':'belum terkonfigurasi di server.')
+}catch(e){$('backendStatus').textContent='Backend belum terhubung. Deploy server.js ke hosting Node.js.'}
+};
+renderHistory();
+</script>
+</body>
+</html>
