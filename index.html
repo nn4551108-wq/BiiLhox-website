@@ -1,403 +1,355 @@
 
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#080808">
-<title>Biilhox Studio</title>
+<title>BiiLHOX Studio</title>
 <style>
 :root {
-  --bg:#080808;
-  --panel:#111111;
-  --panel2:#171717;
-  --silver:#c8c8c8;
-  --white:#f5f5f5;
-  --muted:#858585;
-  --line:#292929;
+  --bg:#080808; --panel:#101010; --panel2:#171717;
+  --silver:#c9c9c9; --white:#f5f5f5; --muted:#999;
+  --line:#303030;
 }
-* {box-sizing:border-box;margin:0;padding:0}
-body {
-  background:var(--bg);
-  color:var(--white);
-  font-family:Inter,Arial,sans-serif;
-  min-height:100vh;
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--white);
+font-family:Inter,Arial,sans-serif;font-size:14px}
+button,input,textarea{font:inherit}
+button{cursor:pointer;color:inherit}
+.app{min-height:100vh}
+.sidebar{position:fixed;inset:0 auto 0 0;width:250px;
+background:#0b0b0b;border-right:1px solid var(--line);
+padding:25px 17px;display:flex;flex-direction:column;z-index:5}
+.brand{text-align:center;padding:5px 0 25px;border-bottom:1px solid #242424}
+.brand-name{font-family:Georgia,serif;font-size:36px;font-weight:bold;
+letter-spacing:-1.5px;background:linear-gradient(#fff,#aaa,#555);
+-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand-sub{font-size:10px;letter-spacing:7px;margin:6px 0 0 7px;color:#bbb}
+.nav{display:grid;gap:7px;margin-top:16px}
+.nav-label{font-size:10px;color:#888;letter-spacing:3px;
+padding:18px 12px 8px}
+.nav button{background:transparent;border:1px solid transparent;
+text-align:left;padding:13px;border-radius:9px;color:#c5c5c5;
+display:flex;gap:13px;align-items:center}
+.nav button:hover{background:#191919}
+.nav button.active{background:linear-gradient(100deg,#303030,#151515);
+border-color:#484848;color:#fff;box-shadow:inset 3px 0 #eee}
+.nav .ico{width:21px;text-align:center;font-size:18px}
+.side-bottom{margin-top:auto;border-top:1px solid #292929;padding-top:18px}
+.ready{color:#ccc;font-size:12px}
+.dot{display:inline-block;width:8px;height:8px;background:#ddd;
+border-radius:50%;margin-right:8px;box-shadow:0 0 10px #aaa}
+.credit{font-size:9px;color:#888;letter-spacing:2px;text-align:center;
+padding-top:23px}
+.main{margin-left:250px;min-height:100vh}
+.topbar{height:65px;display:flex;align-items:center;justify-content:space-between;
+padding:0 28px;border-bottom:1px solid var(--line);background:#0b0b0b}
+.top-left{display:flex;align-items:center;gap:15px;letter-spacing:4px;
+font-size:11px}
+.top-right{display:flex;align-items:center;gap:17px;color:#bbb}
+.pill{border:1px solid #444;border-radius:25px;padding:9px 14px;
+font-size:9px;letter-spacing:1px}
+.avatar{width:39px;height:39px;border:1px solid #aaa;border-radius:50%;
+display:grid;place-items:center;font-family:Georgia,serif;font-size:21px}
+.mobile-menu{display:none;background:none;border:0;font-size:23px}
+.content{max-width:1450px;margin:auto;padding:22px 27px 30px}
+.hero{position:relative;overflow:hidden;min-height:260px;
+border:1px solid #393939;border-radius:12px;padding:32px;
+background:radial-gradient(ellipse at 90% 15%,#45454555,transparent 36%),
+linear-gradient(120deg,#161616,#080808 72%)}
+.hero:after{content:"";position:absolute;right:-80px;top:-170px;
+width:360px;height:500px;border:1px solid #7774;transform:rotate(40deg);
+box-shadow:-22px 0 0 #8881,-44px 0 0 #7771}
+.eyebrow{font-size:10px;letter-spacing:4px;color:#bbb}
+.hero h1{font-size:clamp(30px,4vw,49px);letter-spacing:-1.8px;
+line-height:1.08;margin:18px 0 12px;max-width:660px;position:relative;z-index:1}
+.hero h1 em{font-family:Georgia,serif;color:#aaa}
+.hero p{color:#bbb;line-height:1.8;max-width:480px}
+.btn{border:1px solid #ddd;background:linear-gradient(#f2f2f2,#aaa);
+color:#111;border-radius:8px;padding:12px 18px;font-weight:bold}
+.btn:hover{filter:brightness(1.1)}
+.btn.secondary{background:#181818;border-color:#444;color:#eee}
+.section-head{display:flex;align-items:center;gap:15px;margin:27px 0 15px}
+.section-head h2{font-size:20px;margin:0;white-space:nowrap}
+.rule{height:1px;background:#333;flex:1}
+.section-tag{font-size:9px;letter-spacing:2px;color:#999;white-space:nowrap}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.stat,.card,.panel{border:1px solid #343434;border-radius:11px;
+background:linear-gradient(140deg,#141414,#0a0a0a)}
+.stat{padding:22px;display:flex;align-items:center;gap:17px;min-width:0}
+.stat-icon{width:54px;height:54px;flex-shrink:0;border:1px solid #777;
+border-radius:14px;display:grid;place-items:center;font-size:24px}
+.stat-label{font-size:10px;letter-spacing:1.5px;color:#bbb}
+.stat-value{font-size:34px;font-weight:750;margin:8px 0 5px}
+.muted{font-size:12px;color:#999;line-height:1.7}
+.tools{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.card{padding:20px;display:flex;gap:15px;min-width:0;
+transition:border-color .2s,transform .2s}
+.card:hover,.stat:hover{border-color:#777}
+.card:hover{transform:translateY(-2px)}
+.card-icon{width:57px;height:57px;flex-shrink:0;border:1px solid #777;
+border-radius:12px;display:grid;place-items:center;font-size:24px}
+.card-content{min-width:0}
+.tag{display:inline-block;border:1px solid #454545;border-radius:20px;
+font-size:9px;padding:4px 8px;color:#ccc;margin-bottom:9px}
+.card h3{font-size:15px;margin:0 0 7px}
+.card p{font-size:11px;line-height:1.7;color:#aaa;margin:0 0 13px}
+.open-tool{background:#101010;border:1px solid #454545;border-radius:20px;
+padding:7px 13px;font-size:11px}
+.open-tool:hover{background:#292929}
+.page{display:none}
+.page.active{display:block}
+.panel{padding:23px;margin-bottom:15px}
+.panel h2{margin:0 0 9px;font-size:21px}
+.panel h3{margin-top:0}
+.form{display:grid;gap:12px}
+.field label{display:block;color:#bbb;font-size:12px;margin-bottom:7px}
+.field input,.field textarea{width:100%;background:#090909;border:1px solid #393939;
+border-radius:8px;color:#fff;padding:12px;outline:none}
+.field input:focus,.field textarea:focus{border-color:#aaa}
+.field textarea{min-height:100px;resize:vertical}
+.form-actions{display:flex;gap:10px;flex-wrap:wrap}
+.library-list{display:grid;gap:10px;margin-top:15px}
+.library-item{display:flex;justify-content:space-between;align-items:center;
+gap:12px;padding:14px;border:1px solid #333;background:#131313;border-radius:9px}
+.library-item p{color:#999;font-size:12px;overflow-wrap:anywhere}
+.delete{border:1px solid #444;background:#181818;padding:8px 10px;border-radius:7px}
+.empty{padding:25px;text-align:center;color:#888;border:1px dashed #444;
+border-radius:9px}
+.notice{color:#bbb;font-size:12px;line-height:1.8;margin-top:15px}
+footer{margin-top:27px;padding:17px 0;border-top:1px solid #252525;
+text-align:center;font-size:9px;color:#888;letter-spacing:2px}
+@media(max-width:1050px){
+ .sidebar{width:210px}.main{margin-left:210px}
+ .content{padding:18px}.tools{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .stat{padding:15px;gap:10px}.stat-icon{width:43px;height:43px}
 }
-button,input,textarea {font:inherit}
-button {cursor:pointer}
-.app {display:flex;min-height:100vh}
-.sidebar {
-  width:245px;flex-shrink:0;
-  background:#0d0d0d;border-right:1px solid var(--line);
-  padding:26px 16px;display:flex;flex-direction:column;
-}
-.brand {padding:5px 12px 28px;border-bottom:1px solid var(--line)}
-.logo {
-  width:39px;height:39px;border:1px solid #aaa;
-  display:grid;place-items:center;border-radius:11px;
-  color:white;font-weight:900;font-size:13px;
-  margin-bottom:12px;background:linear-gradient(135deg,#333,#080808);
-}
-.brand h2 {font-size:19px;letter-spacing:1px}
-.brand p {font-size:11px;color:var(--muted);margin-top:6px}
-.nav-title {font-size:10px;color:#666;letter-spacing:2px;padding:25px 12px 12px}
-.nav button {
-  display:flex;align-items:center;gap:12px;width:100%;
-  border:1px solid transparent;background:transparent;color:#999;
-  padding:12px;border-radius:9px;text-align:left;margin:3px 0;font-size:13px;
-}
-.nav button.active,.nav button:hover {
-  background:#1b1b1b;border-color:#303030;color:white;
-}
-.nav-icon {width:20px;text-align:center;font-size:16px}
-.side-bottom {margin-top:auto;padding:18px 12px 0;border-top:1px solid var(--line)}
-.status {font-size:11px;color:#aaa;display:flex;align-items:center;gap:8px}
-.dot {width:7px;height:7px;border-radius:50%;background:#bfbfbf}
-.side-bottom p {font-size:10px;color:#666;margin-top:12px}
-main {flex:1;min-width:0}
-.topbar {
-  height:72px;border-bottom:1px solid var(--line);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 34px;background:#0b0b0b;
-}
-.breadcrumb {font-size:12px;color:#888}
-.breadcrumb b {color:#eee}
-.top-actions {display:flex;align-items:center;gap:10px}
-.pill {border:1px solid #303030;border-radius:20px;padding:8px 12px;font-size:11px;color:#bbb}
-.avatar {
-  width:32px;height:32px;border-radius:50%;border:1px solid #777;
-  background:#222;display:grid;place-items:center;font-size:11px;font-weight:bold;
-}
-.content {max-width:1300px;margin:auto;padding:34px}
-.page {display:none}
-.page.active {display:block}
-.eyebrow {color:#929292;letter-spacing:3px;font-size:10px;margin-bottom:13px}
-h1 {font-size:clamp(25px,4vw,36px);letter-spacing:-1px}
-.subtitle {color:var(--muted);font-size:13px;line-height:1.7;margin-top:10px}
-.welcome {
-  padding:31px;border:1px solid #333;border-radius:15px;
-  background:radial-gradient(ellipse at 90% 0%,#282828 0%,#141414 38%,#101010 75%);
-  position:relative;overflow:hidden;
-}
-.welcome:after {
-  content:"BX";position:absolute;right:28px;top:8px;
-  font-size:clamp(75px,14vw,150px);font-weight:900;color:#ffffff08;
-  letter-spacing:-12px;pointer-events:none;
-}
-.welcome h1 span {color:#aaa}
-.welcome .subtitle {max-width:500px}
-.button {
-  padding:11px 16px;border-radius:8px;border:1px solid #555;
-  background:#e8e8e8;color:#111;font-size:12px;font-weight:bold;
-}
-.button.secondary {background:#171717;color:#eee;border-color:#353535}
-.welcome .button {margin-top:23px}
-.section-head {display:flex;align-items:center;justify-content:space-between;gap:12px;margin:30px 0 15px}
-.section-head h2 {font-size:15px}
-.section-head span {font-size:11px;color:#777}
-.stats {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.stat,.card,.panel {
-  background:var(--panel);border:1px solid var(--line);border-radius:12px;
-}
-.stat {padding:20px}
-.stat-label {font-size:11px;color:#999}
-.stat-value {font-size:25px;font-weight:700;margin:16px 0 8px}
-.stat-note {font-size:10px;color:#777}
-.grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.card {padding:19px;transition:.2s}
-.card:hover {border-color:#666;transform:translateY(-2px)}
-.card-symbol {
-  width:40px;height:40px;border-radius:10px;background:#222;
-  border:1px solid #373737;display:grid;place-items:center;font-size:19px;margin-bottom:18px;
-}
-.card h3 {font-size:14px}
-.card p {font-size:11px;color:#888;line-height:1.7;margin-top:9px;min-height:38px}
-.card button {margin-top:17px;width:100%}
-.tag {font-size:9px;color:#bbb;border:1px solid #363636;padding:5px 8px;border-radius:20px;display:inline-block;margin-bottom:13px}
-.panel {padding:22px;margin-top:20px}
-.panel h2 {font-size:15px;margin-bottom:10px}
-.panel p {font-size:12px;color:#999;line-height:1.8}
-.field {display:block;margin-top:16px}
-.field span {display:block;color:#aaa;font-size:11px;margin-bottom:8px}
-.field input,.field textarea {
-  width:100%;padding:12px;border-radius:8px;border:1px solid #333;
-  background:#090909;color:#eee;outline:none;
-}
-.field input:focus,.field textarea:focus {border-color:#999}
-.field textarea {min-height:120px;resize:vertical}
-.library-list {display:grid;gap:10px;margin-top:20px}
-.library-item {
-  display:flex;justify-content:space-between;align-items:center;gap:12px;
-  padding:14px;background:#151515;border:1px solid #303030;border-radius:9px;
-}
-.library-item strong {font-size:12px}
-.library-item small {display:block;color:#888;font-size:10px;margin-top:5px;white-space:pre-wrap;overflow-wrap:anywhere}
-.delete {background:transparent;color:#aaa;border:1px solid #393939;border-radius:6px;padding:7px 10px;font-size:10px}
-.empty {padding:28px;text-align:center;color:#777;font-size:12px;border:1px dashed #333;border-radius:9px}
-footer {padding:30px 0;color:#666;font-size:10px;text-align:center}
-.mobile-menu {display:none}
-.toast {
-  position:fixed;right:20px;bottom:20px;background:#eee;color:#111;
-  padding:14px 18px;border-radius:9px;font-size:12px;
-  opacity:0;transform:translateY(10px);transition:.2s;pointer-events:none;z-index:10;
-}
-.toast.show {opacity:1;transform:translateY(0)}
-@media(max-width:900px) {
-  .sidebar {width:205px}
-  .content {padding:24px}
-  .grid {grid-template-columns:repeat(2,minmax(0,1fr))}
-}
-@media(max-width:600px) {
-  .app {display:block}
-  .sidebar {
-    display:none;position:fixed;z-index:5;top:0;bottom:0;left:0;
-    width:260px;box-shadow:10px 0 40px #000a;
-  }
-  .sidebar.open {display:flex}
-  .topbar {height:60px;padding:0 15px}
-  .mobile-menu {display:inline-block;background:#171717;border:1px solid #333;color:#eee;padding:8px 10px;border-radius:7px;margin-right:10px}
-  .top-actions .pill {display:none}
-  .content {padding:18px 14px}
-  .welcome {padding:23px 19px}
-  .welcome:after {right:12px;top:22px;font-size:70px}
-  .stats {grid-template-columns:1fr}
-  .stat {padding:16px}
-  .stat-value {margin:9px 0}
-  .grid {grid-template-columns:1fr}
-  .card p {min-height:0}
-  .section-head {margin-top:24px}
+@media(max-width:680px){
+ .sidebar{width:250px;transform:translateX(-100%);transition:transform .25s;
+ box-shadow:15px 0 40px #0008}
+ .sidebar.open{transform:translateX(0)}
+ .main{margin-left:0}.topbar{height:59px;padding:0 15px}
+ .mobile-menu{display:block}.top-left{gap:10px;letter-spacing:2px}
+ .top-right{gap:10px}.pill{display:none}.avatar{width:33px;height:33px}
+ .content{padding:14px}
+ .hero{padding:23px 19px;min-height:245px}
+ .hero h1{font-size:34px}.hero p{font-size:12px}
+ .stats{grid-template-columns:1fr}
+ .stat{padding:15px}
+ .tools{grid-template-columns:1fr}
+ .card{padding:17px}
+ .section-head h2{font-size:17px}.section-tag{font-size:8px}
+ footer{font-size:8px;line-height:2}
 }
 </style>
 </head>
 <body>
 <div class="app">
-  <aside class="sidebar" id="sidebar">
-    <div class="brand">
-      <div class="logo">BX</div>
-      <h2>BIILHOX<span style="color:#888">.</span></h2>
-      <p>CREATOR STUDIO · VERSION 1.0</p>
-    </div>
-    <div class="nav-title">WORKSPACE</div>
-    <nav class="nav">
-      <button class="active" data-page="home"><span class="nav-icon">⌂</span>Dashboard</button>
-      <button data-page="upload"><span class="nav-icon">↥</span>Upload Center</button>
-      <button data-page="animations"><span class="nav-icon">◈</span>Animations</button>
-      <button data-page="mesh"><span class="nav-icon">◇</span>Image to Mesh</button>
-      <button data-page="skybox"><span class="nav-icon">◎</span>SkyBox 360</button>
-    </nav>
-    <div class="nav-title">PERSONAL</div>
-    <nav class="nav">
-      <button data-page="library"><span class="nav-icon">▤</span>My Library</button>
-      <button data-page="settings"><span class="nav-icon">⚙</span>Settings</button>
-    </nav>
-    <div class="side-bottom">
-      <div class="status"><span class="dot"></span>Studio is ready</div>
-      <p>CRAFTED BY BIILXLANGZ</p>
-    </div>
-  </aside>
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <div class="brand-name">BiiLHOX</div>
+    <div class="brand-sub">S T U D I O</div>
+  </div>
+  <nav class="nav">
+    <button class="active" data-page="dashboard"><span class="ico">⌂</span> Dashboard</button>
+    <button data-page="upload"><span class="ico">⇧</span> Upload Center</button>
+    <button data-page="animations"><span class="ico">◇</span> Animations</button>
+    <button data-page="mesh"><span class="ico">⬡</span> Image to Mesh</button>
+    <button data-page="skybox"><span class="ico">◎</span> SkyBox 360</button>
+    <div class="nav-label">PERSONAL</div>
+    <button data-page="library"><span class="ico">▦</span> My Library</button>
+    <button data-page="settings"><span class="ico">⚙</span> Settings</button>
+  </nav>
+  <div class="side-bottom">
+    <div class="ready"><span class="dot"></span>Studio is ready</div>
+    <div class="credit">CRAFTED BY BIILXLANGZ</div>
+  </div>
+</aside>
 
-  <main>
-    <header class="topbar">
-      <div style="display:flex;align-items:center">
-        <button class="mobile-menu" id="menuBtn">☰</button>
-        <div class="breadcrumb">Workspace / <b id="crumb">Dashboard</b></div>
-      </div>
-      <div class="top-actions">
-        <div class="pill">● PERSONAL WORKSPACE</div>
-        <div class="avatar">BX</div>
-      </div>
-    </header>
+<main class="main">
+<header class="topbar">
+  <div class="top-left">
+    <button class="mobile-menu" id="menuBtn" aria-label="Buka menu">☰</button>
+    <span>│</span><span id="crumb">B I I L H O X &nbsp; S T U D I O</span>
+  </div>
+  <div class="top-right">
+    <span class="pill">● &nbsp; PERSONAL WORKSPACE</span>
+    <span>♧</span><div class="avatar">B</div>
+  </div>
+</header>
 
-    <div class="content">
-      <section class="page active" id="home">
-        <div class="welcome">
-          <div class="eyebrow">WELCOME TO YOUR WORKSPACE</div>
-          <h1>Build something <span>extraordinary.</span></h1>
-          <p class="subtitle">Satu workspace untuk mengatur project, menyimpan ide, dan menjelajahi tools kreatif Biilhox Studio.</p>
-          <button class="button" data-go="library">Explore My Library ↗</button>
-        </div>
+<div class="content">
+<section class="page active" id="page-dashboard">
+  <div class="hero">
+    <div class="eyebrow">WELCOME TO BIILHOX STUDIO</div>
+    <h1>Build something<br><em>extraordinary.</em></h1>
+    <p>Satu workspace untuk mengatur project, menyimpan ide, dan menjelajahi tools kreatif BiiLHOX Studio.</p>
+    <button class="btn" data-go="library">Explore My Library &nbsp; ↗</button>
+  </div>
+  <div class="section-head"><h2>Workspace Overview</h2><div class="rule"></div><span class="section-tag">YOUR STUDIO</span></div>
+  <div class="stats">
+    <div class="stat"><div class="stat-icon">▤</div><div><div class="stat-label">SAVED PROJECTS</div><div class="stat-value" id="projectCount">00</div><div class="muted">Project tersimpan di library</div></div></div>
+    <div class="stat"><div class="stat-icon">⬡</div><div><div class="stat-label">CREATIVE TOOLS</div><div class="stat-value">04</div><div class="muted">Tools tersedia di workspace</div></div></div>
+    <div class="stat"><div class="stat-icon">ϟ</div><div><div class="stat-label">STUDIO STATUS</div><div class="stat-value" style="font-size:27px">READY</div><div class="muted">Workspace aktif</div></div></div>
+  </div>
+  <div class="section-head"><h2>Creative Tools</h2><div class="rule"></div><span class="section-tag">QUICK ACCESS</span></div>
+  <div class="tools">
+    <div class="card"><div class="card-icon">⇧</div><div class="card-content"><span class="tag">WORKSPACE</span><h3>Upload Center</h3><p>Simpan catatan aset dan link file project.</p><button class="open-tool" data-go="upload">Open Tool ↗</button></div></div>
+    <div class="card"><div class="card-icon">◇</div><div class="card-content"><span class="tag">ANIMATION</span><h3>Animations</h3><p>Kelola catatan animasi dan ID asset Roblox.</p><button class="open-tool" data-go="animations">Open Tool ↗</button></div></div>
+    <div class="card"><div class="card-icon">⬡</div><div class="card-content"><span class="tag">3D WORKSPACE</span><h3>Image to Mesh</h3><p>Simpan referensi gambar dan rencana model 3D.</p><button class="open-tool" data-go="mesh">Open Tool ↗</button></div></div>
+    <div class="card"><div class="card-icon">◎</div><div class="card-content"><span class="tag">ENVIRONMENT</span><h3>SkyBox 360</h3><p>Simpan ide environment dan referensi skybox.</p><button class="open-tool" data-go="skybox">Open Tool ↗</button></div></div>
+    <div class="card"><div class="card-icon">▦</div><div class="card-content"><span class="tag">PERSONAL</span><h3>My Library</h3><p>Tambahkan dan simpan catatan project.</p><button class="open-tool" data-go="library">Open Library ↗</button></div></div>
+    <div class="card"><div class="card-icon">⚙</div><div class="card-content"><span class="tag">PREFERENCES</span><h3>Settings</h3><p>Atur nama workspace yang tampil di dashboard.</p><button class="open-tool" data-go="settings">Open Settings ↗</button></div></div>
+  </div>
+</section>
 
-        <div class="section-head"><h2>Workspace Overview</h2><span>YOUR STUDIO</span></div>
-        <div class="stats">
-          <div class="stat"><div class="stat-label">SAVED PROJECTS</div><div class="stat-value" id="projectCount">00</div><div class="stat-note">Project tersimpan di library</div></div>
-          <div class="stat"><div class="stat-label">CREATIVE TOOLS</div><div class="stat-value">04</div><div class="stat-note">Tools tersedia di workspace</div></div>
-          <div class="stat"><div class="stat-label">STUDIO STATUS</div><div class="stat-value" style="font-size:20px">READY</div><div class="stat-note">Workspace aktif</div></div>
-        </div>
+<section class="page" id="page-upload">
+  <div class="section-head"><h2>Upload Center</h2><div class="rule"></div></div>
+  <div class="panel"><h2>Asset Workspace</h2><p class="muted">Catat nama asset dan link file untuk memudahkan pengelolaan project.</p>
+  <form class="form" id="uploadForm">
+    <div class="field"><label>Nama asset / project</label><input name="name" required placeholder="Contoh: BiiLHOX UI Kit"></div>
+    <div class="field"><label>Link file (opsional)</label><input name="link" type="url" placeholder="https://..."></div>
+    <div class="field"><label>Catatan</label><textarea name="note" placeholder="Tulis detail asset atau project..."></textarea></div>
+    <div class="form-actions"><button class="btn">Simpan ke Library</button></div>
+  </form>
+  <p class="notice">Info: fitur ini menyimpan referensi dan catatan di browser, bukan mengunggah file ke server.</p></div>
+</section>
 
-        <div class="section-head"><h2>Creative Tools</h2><span>QUICK ACCESS</span></div>
-        <div class="grid">
-          <article class="card"><div class="card-symbol">↥</div><span class="tag">WORKSPACE</span><h3>Upload Center</h3><p>Catat asset dan link file project dalam satu tempat.</p><button class="button secondary" data-go="upload">Open Tool ↗</button></article>
-          <article class="card"><div class="card-symbol">◈</div><span class="tag">ANIMATION</span><h3>Animations</h3><p>Kelola catatan animasi dan ID asset Roblox.</p><button class="button secondary" data-go="animations">Open Tool ↗</button></article>
-          <article class="card"><div class="card-symbol">◇</div><span class="tag">3D WORKSPACE</span><h3>Image to Mesh</h3><p>Catat referensi gambar dan rencana pembuatan model 3D.</p><button class="button secondary" data-go="mesh">Open Tool ↗</button></article>
-          <article class="card"><div class="card-symbol">◎</div><span class="tag">ENVIRONMENT</span><h3>SkyBox 360</h3><p>Simpan ide environment dan referensi skybox.</p><button class="button secondary" data-go="skybox">Open Tool ↗</button></article>
-          <article class="card"><div class="card-symbol">▤</div><span class="tag">PERSONAL</span><h3>My Library</h3><p>Tambahkan dan simpan catatan project di browser ini.</p><button class="button secondary" data-go="library">Open Library ↗</button></article>
-          <article class="card"><div class="card-symbol">⚙</div><span class="tag">PREFERENCES</span><h3>Settings</h3><p>Atur nama workspace yang tampil di dashboard.</p><button class="button secondary" data-go="settings">Open Settings ↗</button></article>
-        </div>
-      </section>
+<section class="page" id="page-animations">
+  <div class="section-head"><h2>Animations</h2><div class="rule"></div></div>
+  <div class="panel"><h2>Animation Reference</h2><p class="muted">Simpan nama animasi, ID Roblox, dan kegunaannya.</p>
+  <form class="form" id="animationForm">
+    <div class="field"><label>Nama animasi</label><input name="name" required placeholder="Contoh: Fishing Idle"></div>
+    <div class="field"><label>Roblox Animation ID</label><input name="link" placeholder="Contoh: 1234567890"></div>
+    <div class="field"><label>Catatan</label><textarea name="note" placeholder="Kegunaan, project, atau detail..."></textarea></div>
+    <button class="btn">Simpan Animasi</button>
+  </form></div>
+</section>
 
-      <section class="page" id="upload">
-        <div class="eyebrow">WORKSPACE / ASSETS</div><h1>Upload Center</h1>
-        <p class="subtitle">Catat file, asset, atau link project yang ingin kamu kelola.</p>
-        <div class="panel">
-          <h2>Add an asset reference</h2><p>Form ini menyimpan catatan dan link. Ini bukan pengunggah file ke server.</p>
-          <form id="uploadForm">
-            <label class="field"><span>Asset name</span><input id="uploadName" required placeholder="Contoh: Logo Biilhox"></label>
-            <label class="field"><span>Asset URL / note</span><input id="uploadLink" required placeholder="Tempel link atau tulis catatan"></label>
-            <button class="button" style="margin-top:17px">Save to Library</button>
-          </form>
-        </div>
-      </section>
+<section class="page" id="page-mesh">
+  <div class="section-head"><h2>Image to Mesh</h2><div class="rule"></div></div>
+  <div class="panel"><h2>3D Project Notes</h2><p class="muted">Simpan referensi gambar dan ide model 3D untuk project lu.</p>
+  <form class="form" id="meshForm">
+    <div class="field"><label>Nama model</label><input name="name" required placeholder="Contoh: Silver Sword"></div>
+    <div class="field"><label>Link gambar referensi</label><input name="link" type="url" placeholder="https://..."></div>
+    <div class="field"><label>Deskripsi model</label><textarea name="note" placeholder="Bentuk, material, ukuran, dan ide..."></textarea></div>
+    <button class="btn">Simpan Referensi</button>
+  </form>
+  <p class="notice">Fitur ini mengelola referensi saja. Konversi gambar menjadi mesh 3D belum tersedia.</p></div>
+</section>
 
-      <section class="page" id="animations">
-        <div class="eyebrow">WORKSPACE / MOTION</div><h1>Animations</h1>
-        <p class="subtitle">Simpan ID animasi Roblox dan keterangan penggunaannya.</p>
-        <div class="panel">
-          <h2>New animation reference</h2>
-          <form id="animationForm">
-            <label class="field"><span>Animation name</span><input id="animName" required placeholder="Contoh: Idle Animation"></label>
-            <label class="field"><span>Animation ID / note</span><input id="animId" required placeholder="Contoh: 123456789"></label>
-            <button class="button" style="margin-top:17px">Save Animation</button>
-          </form>
-        </div>
-      </section>
+<section class="page" id="page-skybox">
+  <div class="section-head"><h2>SkyBox 360</h2><div class="rule"></div></div>
+  <div class="panel"><h2>Environment Planner</h2><p class="muted">Simpan konsep suasana dan referensi skybox untuk map Roblox.</p>
+  <form class="form" id="skyForm">
+    <div class="field"><label>Nama environment</label><input name="name" required placeholder="Contoh: Midnight Summit"></div>
+    <div class="field"><label>Link referensi (opsional)</label><input name="link" type="url" placeholder="https://..."></div>
+    <div class="field"><label>Deskripsi suasana</label><textarea name="note" placeholder="Warna langit, ambience, tema map..."></textarea></div>
+    <button class="btn">Simpan Environment</button>
+  </form>
+  <p class="notice">Generator panorama 360 belum tersedia; bagian ini untuk menyimpan konsep dan referensi.</p></div>
+</section>
 
-      <section class="page" id="mesh">
-        <div class="eyebrow">WORKSPACE / 3D</div><h1>Image to Mesh</h1>
-        <p class="subtitle">Workspace untuk menyiapkan referensi pembuatan model 3D.</p>
-        <div class="panel">
-          <h2>Prepare a 3D reference</h2>
-          <p>Versi ini belum mengonversi gambar menjadi mesh secara otomatis. Kamu bisa menyimpan referensi dan catatan kebutuhan model di library.</p>
-          <form id="meshForm">
-            <label class="field"><span>Model name</span><input id="meshName" required placeholder="Contoh: Silver Sword"></label>
-            <label class="field"><span>Image URL / description</span><textarea id="meshNote" required placeholder="Link gambar atau detail model yang dibutuhkan"></textarea></label>
-            <button class="button" style="margin-top:17px">Save Reference</button>
-          </form>
-        </div>
-      </section>
+<section class="page" id="page-library">
+  <div class="section-head"><h2>My Library</h2><div class="rule"></div></div>
+  <div class="panel"><h2>Saved Projects</h2><p class="muted">Catatan project tersimpan di browser perangkat ini.</p><div id="libraryList" class="library-list"></div></div>
+</section>
 
-      <section class="page" id="skybox">
-        <div class="eyebrow">WORKSPACE / ENVIRONMENT</div><h1>SkyBox 360</h1>
-        <p class="subtitle">Susun ide dan referensi lingkungan 360 derajat.</p>
-        <div class="panel">
-          <h2>New environment reference</h2>
-          <form id="skyForm">
-            <label class="field"><span>Environment name</span><input id="skyName" required placeholder="Contoh: Midnight City"></label>
-            <label class="field"><span>Reference URL / notes</span><textarea id="skyNote" required placeholder="Masukkan link referensi atau catatan"></textarea></label>
-            <button class="button" style="margin-top:17px">Save Reference</button>
-          </form>
-        </div>
-      </section>
+<section class="page" id="page-settings">
+  <div class="section-head"><h2>Settings</h2><div class="rule"></div></div>
+  <div class="panel"><h2>Workspace Preferences</h2>
+  <form id="settingsForm" class="form">
+    <div class="field"><label>Nama workspace</label><input id="workspaceName" maxlength="45" placeholder="BiiLHOX Studio"></div>
+    <button class="btn">Simpan Pengaturan</button>
+  </form>
+  <p class="notice">Pengaturan disimpan secara lokal di browser perangkat ini.</p></div>
+</section>
 
-      <section class="page" id="library">
-        <div class="eyebrow">PERSONAL / COLLECTION</div><h1>My Library</h1>
-        <p class="subtitle">Semua catatan yang kamu simpan di browser ini.</p>
-        <div class="panel">
-          <h2>Saved items</h2><p>Data disimpan di browser perangkat ini menggunakan localStorage, bukan database online.</p>
-          <div id="libraryList" class="library-list"></div>
-        </div>
-      </section>
-
-      <section class="page" id="settings">
-        <div class="eyebrow">PERSONAL / PREFERENCES</div><h1>Settings</h1>
-        <p class="subtitle">Atur identitas workspace yang tampil di dashboard.</p>
-        <div class="panel">
-          <h2>Workspace profile</h2>
-          <form id="settingsForm">
-            <label class="field"><span>Display name</span><input id="displayName" maxlength="35" placeholder="Biilhox Studio"></label>
-            <button class="button" style="margin-top:17px">Save Settings</button>
-          </form>
-        </div>
-      </section>
-
-      <footer>BIILHOX STUDIO · BLACK & SILVER EDITION · BY BIILXLANGZ</footer>
-    </div>
-  </main>
+<footer>BIILHOX STUDIO &nbsp; • &nbsp; BLACK & SILVER EDITION &nbsp; • &nbsp; BY BIILXLANGZ</footer>
 </div>
-<div class="toast" id="toast"></div>
-
+</main>
+</div>
 <script>
-const $ = id => document.getElementById(id);
-const pages = ["home","upload","animations","mesh","skybox","library","settings"];
-let items = [];
-try { items = JSON.parse(localStorage.getItem("biilhoxLibrary") || "[]"); } catch(e) { items = []; }
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+const pages = ["dashboard","upload","animations","mesh","skybox","library","settings"];
+let records = [];
+try { records = JSON.parse(localStorage.getItem("biilhox_records") || "[]"); }
+catch(e) { records = []; }
 
-function saveItems() {
-  try { localStorage.setItem("biilhoxLibrary", JSON.stringify(items)); } catch(e) {}
+function saveRecords(){
+  try { localStorage.setItem("biilhox_records",JSON.stringify(records)); }
+  catch(e) { alert("Browser tidak bisa menyimpan data. Coba kosongkan penyimpanan browser."); }
   renderLibrary();
 }
-function toast(message) {
-  const el = $("toast");
-  el.textContent = message;
-  el.classList.add("show");
-  clearTimeout(window.toastTimer);
-  window.toastTimer = setTimeout(() => el.classList.remove("show"), 2300);
-}
-function navigate(id) {
-  if (!pages.includes(id)) return;
-  document.querySelectorAll(".page").forEach(p => p.classList.toggle("active", p.id === id));
-  document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("active", b.dataset.page === id));
-  const names = {home:"Dashboard",upload:"Upload Center",animations:"Animations",mesh:"Image to Mesh",skybox:"SkyBox 360",library:"My Library",settings:"Settings"};
-  $("crumb").textContent = names[id];
-  $("sidebar").classList.remove("open");
-  window.scrollTo({top:0,behavior:"smooth"});
-  if(id === "library") renderLibrary();
-}
-document.querySelectorAll("[data-page]").forEach(b => b.addEventListener("click", () => navigate(b.dataset.page)));
-document.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => navigate(b.dataset.go)));
-$("menuBtn").addEventListener("click", () => $("sidebar").classList.toggle("open"));
-
-function addItem(type, name, note) {
-  items.unshift({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),type,name,note,created:new Date().toLocaleDateString("id-ID")});
-  saveItems();
-  toast("Berhasil disimpan ke library");
-}
-$("uploadForm").addEventListener("submit", e => {
-  e.preventDefault(); addItem("Asset", $("uploadName").value.trim(), $("uploadLink").value.trim()); e.target.reset();
-});
-$("animationForm").addEventListener("submit", e => {
-  e.preventDefault(); addItem("Animation", $("animName").value.trim(), $("animId").value.trim()); e.target.reset();
-});
-$("meshForm").addEventListener("submit", e => {
-  e.preventDefault(); addItem("3D Reference", $("meshName").value.trim(), $("meshNote").value.trim()); e.target.reset();
-});
-$("skyForm").addEventListener("submit", e => {
-  e.preventDefault(); addItem("SkyBox", $("skyName").value.trim(), $("skyNote").value.trim()); e.target.reset();
-});
-function renderLibrary() {
-  $("projectCount").textContent = String(items.length).padStart(2,"0");
-  const list = $("libraryList");
-  list.replaceChildren();
-  if (!items.length) {
-    const empty = document.createElement("div");
-    empty.className = "empty";
-    empty.textContent = "Belum ada item. Tambahkan referensi dari tools di workspace.";
-    list.appendChild(empty); return;
+function renderLibrary(){
+  $("#projectCount").textContent=String(records.length).padStart(2,"0");
+  const list=$("#libraryList");
+  list.innerHTML="";
+  if(!records.length){
+    list.innerHTML='<div class="empty">Library masih kosong.<br>Tambahkan catatan dari Creative Tools.</div>';
+    return;
   }
-  items.forEach(item => {
-    const row = document.createElement("div"); row.className = "library-item";
-    const info = document.createElement("div");
-    const name = document.createElement("strong"); name.textContent = item.name;
-    const note = document.createElement("small"); note.textContent = item.type + " · " + item.created + "\n" + item.note;
-    info.append(name,note);
-    const del = document.createElement("button"); del.className = "delete"; del.textContent = "Delete";
-    del.addEventListener("click", () => {
-      items = items.filter(x => x.id !== item.id); saveItems(); toast("Item dihapus");
+  records.forEach(item=>{
+    const el=document.createElement("div");
+    el.className="library-item";
+    const info=document.createElement("div");
+    const title=document.createElement("strong");
+    title.textContent=item.name;
+    const detail=document.createElement("p");
+    detail.textContent=[item.type,item.link,item.note].filter(Boolean).join(" · ");
+    info.append(title,detail);
+    const del=document.createElement("button");
+    del.className="delete";del.textContent="Hapus";
+    del.addEventListener("click",()=>{
+      records=records.filter(r=>r.id!==item.id);saveRecords();
     });
-    row.append(info,del); list.appendChild(row);
+    el.append(info,del);list.append(el);
   });
 }
-$("settingsForm").addEventListener("submit", e => {
+function navigate(name){
+  if(!pages.includes(name)) return;
+  pages.forEach(p=>$("#page-"+p).classList.toggle("active",p===name));
+  $$(".nav button[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===name));
+  const labels={dashboard:"B I I L H O X   S T U D I O",upload:"UPLOAD CENTER",
+    animations:"ANIMATIONS",mesh:"IMAGE TO MESH",skybox:"SKYBOX 360",
+    library:"MY LIBRARY",settings:"SETTINGS"};
+  $("#crumb").textContent=labels[name];
+  $("#sidebar").classList.remove("open");
+  if(name==="library")renderLibrary();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+$$("[data-page]").forEach(b=>b.addEventListener("click",()=>navigate(b.dataset.page)));
+$$("[data-go]").forEach(b=>b.addEventListener("click",()=>navigate(b.dataset.go)));
+$("#menuBtn").addEventListener("click",()=>$("#sidebar").classList.toggle("open"));
+
+function bindForm(id,type){
+  $("#"+id).addEventListener("submit",e=>{
+    e.preventDefault();
+    const f=new FormData(e.currentTarget);
+    records.unshift({id:Date.now()+Math.random(),type,
+      name:String(f.get("name")||"Untitled").trim(),
+      link:String(f.get("link")||"").trim(),
+      note:String(f.get("note")||"").trim()});
+    saveRecords();e.currentTarget.reset();
+    alert("Catatan berhasil disimpan ke My Library.");
+    navigate("library");
+  });
+}
+bindForm("uploadForm","Asset");
+bindForm("animationForm","Animation");
+bindForm("meshForm","3D Reference");
+bindForm("skyForm","Environment");
+
+const oldName=localStorage.getItem("biilhox_workspace")||"BiiLHOX Studio";
+$("#workspaceName").value=oldName;
+$("#settingsForm").addEventListener("submit",e=>{
   e.preventDefault();
-  const value = $("displayName").value.trim() || "Biilhox Studio";
-  document.querySelector(".brand h2").textContent = value.toUpperCase() + ".";
-  try { localStorage.setItem("biilhoxDisplayName", value); } catch(e) {}
-  toast("Workspace diperbarui");
+  const name=$("#workspaceName").value.trim()||"BiiLHOX Studio";
+  try{localStorage.setItem("biilhox_workspace",name);}catch(err){}
+  alert("Pengaturan workspace tersimpan.");
 });
-try {
-  const savedName = localStorage.getItem("biilhoxDisplayName");
-  if(savedName) { $("displayName").value = savedName; document.querySelector(".brand h2").textContent = savedName.toUpperCase() + "."; }
-} catch(e) {}
 renderLibrary();
 </script>
 </body>
