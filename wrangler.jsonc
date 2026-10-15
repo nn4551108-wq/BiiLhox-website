@@ -1,8 +1,6 @@
-<code>
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "biilhox-websitee",
-  "main": "worker.js",
-  "compatibility_date": "2026-10-14"
+"$schema": "node_modules/wrangler/config-schema.json",
+"name": "biilhox-websitee",
+"main": "./worker.js",
+"compatibility_date": "2026-10-14"
 }
-</code>
