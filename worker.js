@@ -1,3 +1,4 @@
+
 const HTML = String.raw`<!DOCTYPE html>
 <html lang="id">
 <head>
@@ -13,8 +14,8 @@ header{padding:22px 5%;border-bottom:1px solid #292b30;background:#0d0e11}
 main{max-width:950px;margin:35px auto;padding:0 16px}
 h1{font-size:30px;margin-bottom:8px}
 .sub{color:#999;line-height:1.6}
-.tabs{display:flex;gap:8px;margin:25px 0}
-button,.tab{border:1px solid #35373d;background:#15161a;color:#eee;padding:12px 16px;border-radius:9px;cursor:pointer}
+.tabs{display:flex;gap:8px;margin:25px 0;flex-wrap:wrap}
+button{border:1px solid #35373d;background:#15161a;color:#eee;padding:12px 16px;border-radius:9px;cursor:pointer}
 button.primary{background:#e7e7e7;color:#111;font-weight:bold}
 .panel{background:#101114;border:1px solid #2b2c31;border-radius:14px;padding:22px}
 label{display:block;margin:15px 0 7px;color:#bbb}
@@ -22,7 +23,7 @@ input,select,textarea{width:100%;padding:12px;background:#090a0c;color:#eee;bord
 textarea{min-height:90px;resize:vertical}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 button:disabled{opacity:.5}
-#status{white-space:pre-wrap;line-height:1.6;margin-top:16px;color:#ccc}
+#status{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.6;margin-top:16px;color:#ccc}
 .item{padding:12px 0;border-bottom:1px solid #292b30;overflow-wrap:anywhere}
 .hidden{display:none}
 footer{text-align:center;color:#666;padding:30px}
@@ -33,10 +34,10 @@ footer{text-align:center;color:#666;padding:30px}
 <header><div class="logo">BiiLxNL <span>STUDIO</span></div></header>
 <main>
 <h1>Roblox Asset Studio</h1>
-<p class="sub">Kelola dan kirim aset melalui Roblox Open Cloud API resmi.</p>
+<p class="sub">Kelola aset melalui Roblox Open Cloud.</p>
 <div class="tabs">
-<button class="tab primary" data-page="upload">Upload Asset</button>
-<button class="tab" data-page="history">Riwayat</button>
+<button class="primary" data-page="upload">Upload Asset</button>
+<button data-page="history">Riwayat</button>
 </div>
 <section id="upload" class="panel">
 <form id="form">
@@ -44,24 +45,31 @@ footer{text-align:center;color:#666;padding:30px}
 <div><label>Target pemilik</label>
 <select name="targetType"><option value="user">Akun pribadi</option><option value="group">Grup</option></select></div>
 <div><label>ID akun / grup Roblox</label>
-<input name="creatorId" required placeholder="Masukkan ID numerik"></div>
+<input name="creatorId" required inputmode="numeric" placeholder="ID numerik"></div>
 </div>
 <label>Jenis aset</label>
 <select name="assetType">
-<option value="Decal">Decal / gambar</option>
-<option value="Model">Model</option>
 <option value="Audio">Audio</option>
 <option value="Animation">Animation</option>
+<option value="Decal">Decal / gambar</option>
+<option value="Model">Model</option>
 </select>
-<label>Nama aset</label><input name="name" required maxlength="50" placeholder="Nama aset">
-<label>Deskripsi</label><textarea name="description" maxlength="1000" placeholder="Deskripsi aset"></textarea>
-<label>File aset</label><input name="file" type="file" required>
-<p class="sub">Ukuran file dibatasi 20 MB oleh aplikasi ini. Format dan kelayakan tetap mengikuti aturan Roblox.</p>
+<label>Nama aset</label>
+<input name="name" required maxlength="50" placeholder="Nama aset">
+<label>Deskripsi</label>
+<textarea name="description" maxlength="1000" placeholder="Deskripsi aset"></textarea>
+<label>File aset</label>
+<input name="file" type="file" required>
+<p class="sub">Maksimal 20 MB per file. Format dan izin tetap mengikuti ketentuan Roblox.</p>
 <button class="primary" id="submit" type="submit">Kirim aset</button>
 <div id="status" role="status"></div>
 </form>
 </section>
-<section id="history" class="panel hidden"><h2>Riwayat di perangkat ini</h2><div id="records"></div><button id="clear">Hapus riwayat lokal</button></section>
+<section id="history" class="panel hidden">
+<h2>Riwayat di perangkat ini</h2>
+<div id="records"></div>
+<button id="clear" type="button">Hapus riwayat lokal</button>
+</section>
 </main>
 <footer>BiiLxNL Studio · by BiiLxLangz</footer>
 <script>
@@ -72,12 +80,15 @@ document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>{
  $('#history').classList.toggle('hidden',b.dataset.page!=='history');
  render();
 });
+function esc(s){
+ return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
 function render(){
- let rows=JSON.parse(localStorage.getItem('bxHistory')||'[]');
+ let rows=[];
+ try{rows=JSON.parse(localStorage.getItem('bxHistory')||'[]')}catch{}
  $('#records').innerHTML=rows.length?rows.map(x=>'<div class="item"><b>'+esc(x.name)+'</b><br>'+esc(x.time)+'<br>'+esc(x.result)+'</div>').join(''):'Belum ada riwayat.';
 }
-function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-$('#clear').onclick=()=>{localStorage.removeItem('bxHistory');render();};
+$('#clear').onclick=()=>{localStorage.removeItem('bxHistory');render()};
 $('#form').onsubmit=async e=>{
  e.preventDefault();
  const button=$('#submit'), status=$('#status'), data=new FormData(e.target);
@@ -86,28 +97,140 @@ $('#form').onsubmit=async e=>{
   const r=await fetch('/api/assets/upload',{method:'POST',body:data});
   const out=await r.json();
   if(!r.ok)throw Error(out.error||'Upload gagal');
-  status.textContent='Permintaan diterima Roblox. Status aset mungkin masih diproses.\\n'+JSON.stringify(out,null,2);
-  const rows=JSON.parse(localStorage.getItem('bxHistory')||'[]');
+  status.textContent='Permintaan diterima Roblox. Proses moderasi dapat memerlukan waktu.\n'+JSON.stringify(out,null,2);
+  let rows=[];
+  try{rows=JSON.parse(localStorage.getItem('bxHistory')||'[]')}catch{}
   rows.unshift({name:data.get('name'),time:new Date().toLocaleString(),result:out.operationPath||out.message||'Dikirim'});
   localStorage.setItem('bxHistory',JSON.stringify(rows.slice(0,50)));
- }catch(err){status.textContent='Gagal: '+err.message;}
- finally{button.disabled=false;}
+  render();
+ }catch(err){status.textContent='Gagal: '+err.message}
+ finally{button.disabled=false}
 };
 render();
 </script>
 </body>
 </html>`;
 
+const json = (data, status = 200) =>
+  Response.json(data, {
+    status,
+    headers: { "Cache-Control": "no-store" }
+  });
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
     if (request.method === "GET" && url.pathname === "/api/health") {
-      return Response.json({ ok: true, service: "BiiLxNL Studio" });
+      return json({ ok: true, service: "BiiLxNL Studio" });
+    }
+
+    if (request.method === "GET" && url.pathname === "/") {
+      return new Response(HTML, {
+        headers: {
+          "content-type": "text/html; charset=utf-8",
+          "X-Content-Type-Options": "nosniff"
+        }
+      });
     }
 
     if (request.method === "POST" && url.pathname === "/api/assets/upload") {
       if (!env.ROBLOX_API_KEY) {
+        return json({
+          error: "ROBLOX_API_KEY belum disetel di Cloudflare Secrets."
+        }, 500);
+      }
+
+      let form;
+      try {
+        form = await request.formData();
+      } catch {
+        return json({ error: "Form upload tidak valid." }, 400);
+      }
+
+      const targetType = String(form.get("targetType") || "");
+      const creatorId = String(form.get("creatorId") || "");
+      const name = String(form.get("name") || "").trim();
+      const description = String(form.get("description") || "").trim();
+      const assetType = String(form.get("assetType") || "");
+      const file = form.get("file");
+
+      const allowedTypes = ["Audio", "Animation", "Decal", "Model"];
+
+      if (
+        !["user", "group"].includes(targetType) ||
+        !/^\d+$/.test(creatorId) ||
+        !name ||
+        name.length > 50 ||
+        description.length > 1000 ||
+        !allowedTypes.includes(assetType) ||
+        !(file instanceof File) ||
+        file.size === 0 ||
+        file.size > 20 * 1024 * 1024
+      ) {
+        return json({
+          error: "Data tidak valid. Periksa ID, nama, jenis aset, dan ukuran file maksimal 20 MB."
+        }, 400);
+      }
+
+      const creator = targetType === "group"
+        ? { groupId: Number(creatorId) }
+        : { userId: Number(creatorId) };
+
+      const metadata = {
+        assetType,
+        displayName: name,
+        description,
+        creationContext: { creator }
+      };
+
+      const body = new FormData();
+      body.append("request", new Blob(
+        [JSON.stringify(metadata)],
+        { type: "application/json" }
+      ));
+      body.append("fileContent", file, file.name);
+
+      let response;
+      try {
+        response = await fetch("https://apis.roblox.com/assets/v1/assets", {
+          method: "POST",
+          headers: { "x-api-key": env.ROBLOX_API_KEY },
+          body
+        });
+      } catch {
+        return json({
+          error: "Tidak dapat menghubungi Roblox Open Cloud."
+        }, 502);
+      }
+
+      const raw = await response.text();
+      let result;
+      try {
+        result = JSON.parse(raw);
+      } catch {
+        result = {};
+      }
+
+      if (!response.ok) {
+        return json({
+          error: "Roblox menolak permintaan upload.",
+          details: result.message || result.error || ("HTTP " + response.status)
+        }, response.status);
+      }
+
+      return json({
+        ok: true,
+        message: "Permintaan upload diterima Roblox.",
+        operationPath: result.path || null,
+        result
+      });
+    }
+
+    return json({ error: "Endpoint tidak ditemukan." }, 404);
+  }
+};
+
         return Response.json(
           { error: "ROBLOX_API_KEY belum disetel di Cloudflare Secrets." },
           { status: 500 }
